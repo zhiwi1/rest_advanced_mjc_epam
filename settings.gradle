@@ -1,0 +1,6 @@
+rootProject.name = 'rest_advanced_mjc'
+include 'persistence'
+include 'model'
+include 'service'
+include 'controller'
+

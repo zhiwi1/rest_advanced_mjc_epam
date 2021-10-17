@@ -1,0 +1,17 @@
+plugins {
+    id 'war'
+}
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.5'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.5.5'
+    implementation 'org.hibernate:hibernate-validator:5.4.0.Final'
+    implementation project(':model')
+    implementation project(':persistence')
+    implementation 'org.modelmapper:modelmapper:2.3.8'
+
+
+}
+
+test {
+    useJUnitPlatform()
+}

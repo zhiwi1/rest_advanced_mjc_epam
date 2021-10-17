@@ -1,0 +1,12 @@
+plugins {
+    id 'war'
+}
+
+
+dependencies {
+    implementation project(':model')
+    implementation project(':service')
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.5'
+    implementation "org.springframework.boot:spring-boot-starter-validation:2.5.5"
+}
+
