@@ -1,5 +1,7 @@
 package com.epam.esm.dao;
 
+import com.epam.esm.util.Page;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +17,7 @@ public interface BaseDao<T, K> {
      *
      * @return the list
      */
-    List<T> findAll();
+    List<T> findAll(Page page);
 
     /**
      * Find optional by id .

@@ -1,6 +1,7 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.util.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,7 @@ public interface GiftCertificateDao extends BaseDao<GiftCertificate, Long> {
      * @param query the query params
      * @return the list of gift certificates
      */
-    List<GiftCertificate> findByQueryParameters(String query);
+    List<GiftCertificate> findByQueryParameters(String query , Page page);
 
     /**
      * Update gift certificate.
@@ -41,5 +42,6 @@ public interface GiftCertificateDao extends BaseDao<GiftCertificate, Long> {
      * @return the optional id of certificate
      */
     Optional<Long> findIdByTagId(Long tagId);
+
 
 }

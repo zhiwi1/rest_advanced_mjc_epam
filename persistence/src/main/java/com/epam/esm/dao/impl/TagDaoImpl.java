@@ -2,6 +2,7 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.util.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -11,6 +12,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Types;
@@ -22,90 +25,65 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class TagDaoImpl implements TagDao {
-
-    private static final String SQL_FIND_ALL = "SELECT id,name FROM tags";
-
-    private static final String SQL_FIND_BY_ID = "SELECT id,name FROM tags WHERE id=?";
-
-    private static final String SQL_FIND_BY_NAME = "SELECT id,name FROM tags WHERE name=?";
-
-    private static final String SQL_INSERT_TAG = "INSERT INTO tags(name) VALUES(?)";
-
-    private static final String SQL_DELETE_TAG = "DELETE FROM tags WHERE id=?";
-
-    private static final String SQL_FIND_BY_GIFT_CERTIFICATE_ID = "SELECT id, name FROM tags "
+    private static final String FIND_ALL = "SELECT tag from Tag tag";
+    private static final String FIND_BY_NAME = "SELECT t FROM Tag t WHERE t.name = :name";
+    private static final String FIND_BY_GIFT_CERTIFICATE_ID = "SELECT id, name FROM tags "
             + "INNER JOIN certificate_tags ON tags.id = certificate_tags.tag_id WHERE "
-            + "certificate_id= ?";
-    private static final String SQL_ATTACH_TAG = "INSERT IGNORE INTO certificate_tags(certificate_id,tag_id) VALUES(?,?) ";
+            + "certificate_id= :certificateId";
+    private static final String SQL_ATTACH_TAG = "INSERT IGNORE INTO certificate_tags(certificate_id,tag_id) VALUES(:certificateId,:tagId) ";
 
 
-    private static final int NAME_PARAM_ID = 1;
-    private final JdbcTemplate jdbcTemplate;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
-    public List<Tag> findAll() {
-        return jdbcTemplate.query(SQL_FIND_ALL, new BeanPropertyRowMapper<>(Tag.class));
+    public List<Tag> findAll(Page page) {
+        return entityManager.createQuery(FIND_ALL, Tag.class)
+                .setFirstResult((page.getNumber() - 1) * page.getSize())
+                .setMaxResults(page.getSize())
+                .getResultList();
     }
 
     @Override
     public Optional<Tag> findByName(String name) {
-        try {
-            return Optional.ofNullable(
-                    jdbcTemplate.queryForObject(
-                            SQL_FIND_BY_NAME, new Object[]{name}, new int[]{Types.VARCHAR}, new BeanPropertyRowMapper<>(Tag.class)
-                    )
-            );
-        } catch (EmptyResultDataAccessException e) {
-            log.error("Zero rows were actually returns by id= {} : {} ", name, e.getMessage());
-        }
-        return Optional.empty();
+        return entityManager.createQuery(FIND_BY_NAME, Tag.class)
+                .setParameter("name", name)
+                .getResultList()
+                .stream()
+                .findFirst();
+    }
+
+    @Override
+    public Optional<Tag> findById(Long id) {
+        return Optional.ofNullable(entityManager.find(Tag.class, id));
     }
 
     @Override
     public Tag create(Tag tag) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(connection -> {
-            PreparedStatement statement = connection.prepareStatement(SQL_INSERT_TAG, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(NAME_PARAM_ID, tag.getName());
-            return statement;
-        }, keyHolder);
-        if (keyHolder.getKey() != null) {
-            tag.setId(keyHolder.getKey().longValue());
-        }
+        entityManager.persist(tag);
         return tag;
     }
 
 
     @Override
     public void delete(Long id) {
-        jdbcTemplate.update(SQL_DELETE_TAG, id);
+        Tag tag = entityManager.find(Tag.class, id);
+        entityManager.remove(tag);
     }
 
     @Override
     public List<Tag> findByCertificateId(Long giftCertificateId) {
-        return jdbcTemplate.query(SQL_FIND_BY_GIFT_CERTIFICATE_ID, new BeanPropertyRowMapper<>(Tag.class), new Object[]{giftCertificateId});
+      return  entityManager.createNativeQuery(FIND_BY_GIFT_CERTIFICATE_ID,Tag.class)
+                .setParameter("certificateId", giftCertificateId)
+                .getResultList();
     }
 
     @Override
     public void attachTag(Long tagId, Long certificateId) {
-        jdbcTemplate.update(SQL_ATTACH_TAG, new Object[]{tagId, certificateId},
-                new int[]{Types.BIGINT, Types.BIGINT});
+        entityManager.createNativeQuery(SQL_ATTACH_TAG)
+                .setParameter("certificateId",certificateId)
+                .setParameter("tagId",tagId)
+                .executeUpdate();
     }
-
-
-    @Override
-    public Optional<Tag> findById(Long id) {
-        try {
-            return Optional.ofNullable(
-                    jdbcTemplate.queryForObject(
-                            SQL_FIND_BY_ID, new Object[]{id}, new int[]{Types.BIGINT}, new BeanPropertyRowMapper<>(Tag.class)
-                    )
-            );
-        } catch (EmptyResultDataAccessException e) {
-            log.error("Zero rows were actually returns by id=%{}:%{}", id, e.getMessage());
-        }
-        return Optional.empty();
-    }
-
 
 }

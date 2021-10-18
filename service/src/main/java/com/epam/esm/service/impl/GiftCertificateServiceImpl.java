@@ -2,18 +2,17 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.TagDao;
-import com.epam.esm.dto.GiftCertificateDto;
-import com.epam.esm.dto.GiftCertificateInputDto;
-import com.epam.esm.dto.GiftCertificateQueryParamDto;
-import com.epam.esm.dto.TagDto;
+import com.epam.esm.dto.*;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.DublicateResourceException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.ServiceGiftCertificateMapper;
+import com.epam.esm.mapper.ServicePageMapper;
 import com.epam.esm.mapper.ServiceTagMapper;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.util.GiftCertificateQueryCreator;
+import com.epam.esm.util.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +30,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final TagDao tagDao;
     private final ServiceGiftCertificateMapper certificateMapper;
     private final ServiceTagMapper tagMapper;
-
+    private final ServicePageMapper pageMapper;
 
     @Transactional
     @Override
@@ -46,12 +45,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificateDto> findAll() {
-        List<GiftCertificate> foundGiftCertificates
-                = giftCertificateDao.findAll();
-        return foundGiftCertificates.stream()
-                .map(this::convertGiftCertificateAndSetTags)
-                .collect(Collectors.toList());
+    public List<GiftCertificateDto> findAll(PageDto pageDto) {
+        return null;
+//        List<GiftCertificate> foundGiftCertificates
+//                = giftCertificateDao.findAll(pageDto);
+//        return foundGiftCertificates.stream()
+//                .map(this::convertGiftCertificateAndSetTags)
+//                .collect(Collectors.toList());
     }
 
     @Override
@@ -65,9 +65,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<GiftCertificateDto> findGiftCertificates(
-            GiftCertificateQueryParamDto giftCertificateQueryParametersDto) {
+            GiftCertificateQueryParamDto giftCertificateQueryParametersDto, PageDto pageDto) {
+        Page page = pageMapper.toEntity(pageDto);
         List<GiftCertificate> foundGiftCertificates
-                = giftCertificateDao.findByQueryParameters(GiftCertificateQueryCreator.createQuery(giftCertificateQueryParametersDto));
+                = giftCertificateDao.findByQueryParameters(GiftCertificateQueryCreator.createQuery(giftCertificateQueryParametersDto), page);
         return foundGiftCertificates.stream()
                 .map(this::convertGiftCertificateAndSetTags)
                 .collect(Collectors.toList());
@@ -95,6 +96,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     private GiftCertificateDto convertGiftCertificateAndSetTags(GiftCertificate giftCertificate) {
         GiftCertificateDto giftCertificateDto = certificateMapper.toDto(giftCertificate);
+        System.out.println(1);
         List<Tag> listOfTags = tagDao.findByCertificateId(giftCertificate.getId());
         Set<TagDto> set = listOfTags.stream().map(tagMapper::toDto).collect(Collectors.toSet());
         giftCertificateDto.setTags(set);

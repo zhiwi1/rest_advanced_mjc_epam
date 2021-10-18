@@ -4,6 +4,7 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.GiftCertificateInputDto;
 import com.epam.esm.dto.GiftCertificateQueryParamDto;
+import com.epam.esm.dto.PageDto;
 import com.epam.esm.service.GiftCertificateService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Range;
@@ -23,8 +24,11 @@ public class GiftCertificateController {
     private GiftCertificateDto dto;
 
     @GetMapping
-    public List<GiftCertificateDto> findGiftCertificates(@Valid @RequestBody GiftCertificateQueryParamDto giftCertificateQueryParametersDto) {
-        return giftCertificateService.findGiftCertificates(giftCertificateQueryParametersDto);
+    public List<GiftCertificateDto> findGiftCertificates(@Valid @RequestBody GiftCertificateQueryParamDto giftCertificateQueryParametersDto,
+                                                         @RequestParam(required = false, defaultValue = "1") int page,
+                                                         @RequestParam(required = false, defaultValue = "5") int size) {
+        PageDto pageDto = new PageDto(page, size);
+        return giftCertificateService.findGiftCertificates(giftCertificateQueryParametersDto, pageDto);
     }
 
     @GetMapping("/{id:\\d+}")

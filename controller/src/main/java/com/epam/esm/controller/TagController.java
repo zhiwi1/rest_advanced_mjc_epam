@@ -1,6 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.dto.CertificateTagDto;
+import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagCreateDto;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.service.TagService;
@@ -22,8 +23,10 @@ public class TagController {
     private final TagService tagService;
 
     @GetMapping
-    public List<TagDto> findAll() {
-        return tagService.findAll();
+    public List<TagDto> findAll(@RequestParam(required = false, defaultValue = "1") int page,
+                                @RequestParam(required = false, defaultValue = "5") int size) {
+        PageDto pageDto=new PageDto(page,size);
+        return tagService.findAll(pageDto);
     }
 
     @GetMapping("/{id:\\d+}")

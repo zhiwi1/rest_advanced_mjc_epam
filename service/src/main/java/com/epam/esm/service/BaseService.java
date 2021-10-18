@@ -1,5 +1,7 @@
 package com.epam.esm.service;
 
+import com.epam.esm.dto.PageDto;
+
 import java.util.List;
 
 /**
@@ -8,7 +10,7 @@ import java.util.List;
  * @param <T> the type parameter
  * @param <K> the type parameter
  */
-public interface BaseService<T,K> {
+public interface BaseService<T, K> {
     /**
      * Delete by id.
      *
@@ -29,5 +31,5 @@ public interface BaseService<T,K> {
      *
      * @return the list
      */
-    List<T> findAll();
+    List<T> findAll(PageDto pageDto);
 }
