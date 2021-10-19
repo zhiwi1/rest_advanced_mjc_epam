@@ -1,6 +1,7 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.TagDao;
+import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.util.Page;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +15,14 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Repository
@@ -27,11 +31,6 @@ import java.util.Optional;
 public class TagDaoImpl implements TagDao {
     private static final String FIND_ALL = "SELECT tag from Tag tag";
     private static final String FIND_BY_NAME = "SELECT t FROM Tag t WHERE t.name = :name";
-    private static final String FIND_BY_GIFT_CERTIFICATE_ID = "SELECT id, name FROM tags "
-            + "INNER JOIN certificate_tags ON tags.id = certificate_tags.tag_id WHERE "
-            + "certificate_id= :certificateId";
-    private static final String SQL_ATTACH_TAG = "INSERT IGNORE INTO certificate_tags(certificate_id,tag_id) VALUES(:certificateId,:tagId) ";
-
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -71,19 +70,11 @@ public class TagDaoImpl implements TagDao {
         entityManager.remove(tag);
     }
 
-    @Override
-    public List<Tag> findByCertificateId(Long giftCertificateId) {
-      return  entityManager.createNativeQuery(FIND_BY_GIFT_CERTIFICATE_ID,Tag.class)
-                .setParameter("certificateId", giftCertificateId)
-                .getResultList();
-    }
 
     @Override
-    public void attachTag(Long tagId, Long certificateId) {
-        entityManager.createNativeQuery(SQL_ATTACH_TAG)
-                .setParameter("certificateId",certificateId)
-                .setParameter("tagId",tagId)
-                .executeUpdate();
+    public void attachTag(Tag tag, GiftCertificate giftCertificate) {
+        giftCertificate.getTags().add(tag);
+        entityManager.merge(giftCertificate);
     }
 
 }

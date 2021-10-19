@@ -31,7 +31,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             + "description, price, duration, create_date, last_update_date FROM certificates "
             + "LEFT JOIN certificate_tags ON certificates.id = certificate_tags.certificate_id "
             + "LEFT JOIN tags ON certificate_tags.tag_id = tags.id ";
-    private static final String SQL_UPDATE_LAST_UPD_DATE = "UPDATE certificates SET last_update_date =:lastUpdateDate WHERE certificates.id=:certificateId";
+    private static final String SQL_UPDATE_LAST_UPD_DATE = "UPDATE GiftCertificate g SET g.lastUpdateDate =:lastUpdateDate WHERE g.id=:certificateId";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -81,7 +81,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     @Override
     public Optional<Long> findIdByTagId(Long tagId) {
         return Optional.ofNullable((Long) entityManager.createNativeQuery(
-                        "SELECT certificate_tags.certificate_id FROM certificate_tags where certificate_tags.tag_id=:tagId")
+                        "SELECT certificate_id FROM certificate_tags where certificate_tags.tag_id=:tagId")
                 .setParameter("tagId", tagId)
                 .getSingleResult());
 
@@ -90,7 +90,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public List<GiftCertificate> findByQueryParameters(String query, Page page) {
-        return entityManager.createNativeQuery(FIND_BY_QUERY_PARAM + query)
+        return entityManager.createNativeQuery(FIND_BY_QUERY_PARAM + query,GiftCertificate.class)
                 .setFirstResult((page.getNumber() - 1) * page.getSize())
                 .setMaxResults(page.getSize())
                 .getResultList();
@@ -99,7 +99,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public void updateLastDate(Long id) {
-        entityManager.createNativeQuery(SQL_UPDATE_LAST_UPD_DATE)
+        entityManager.createQuery(SQL_UPDATE_LAST_UPD_DATE)
                 .setParameter("lastUpdateDate",ZonedDateTime.now(ZoneId.systemDefault()))
                 .setParameter("certificateId",id)
                 .executeUpdate();

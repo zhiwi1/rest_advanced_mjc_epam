@@ -11,38 +11,24 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.hateoas.RepresentationModel;
 
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.util.Set;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GiftCertificateDto extends RepresentationModel<TagDto> {
+public class OrderDto extends RepresentationModel<OrderDto> {
     @Range(min = 0)
-    private long id;
-    @Size(max=100)
-    @Pattern(regexp = "[\\D ]+")
-    private String name;
-    @Pattern(regexp = "[\\D ]+")
-    @Size(max=200)
-    private String description;
+    private Long id;
     @Range(min = 0)
     private BigDecimal price;
-    @Range(min = 0, max = Integer.MAX_VALUE)
-    private int duration;
-    private Set<TagDto> tags;
     @JsonProperty("create_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @JsonSerialize(using = ZonedDateTimeSerializer.class)
     private ZonedDateTime createDate;
-    @JsonProperty("last_update_date")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    @JsonSerialize(using = ZonedDateTimeSerializer.class)
-    private ZonedDateTime lastUpdateDate;
-
+    @Range(min = 1)
+    private Long userId;
+    @Range(min = 1)
+    private Long giftCertificateId;
 }
-

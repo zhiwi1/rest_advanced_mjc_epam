@@ -19,10 +19,10 @@ public class ServiceGiftCertificateMapper {
     private final ServiceTagMapper tagMapper;
 
 
-    public GiftCertificate toEntity(GiftCertificateDto giftCertificateDTO) {
-        GiftCertificate giftCertificate = modelMapper.map(giftCertificateDTO, GiftCertificate.class);
-        if (giftCertificateDTO.getTags() != null) {
-            Set<Tag> tags = (giftCertificateDTO.getTags().stream()
+    public GiftCertificate toEntity(GiftCertificateDto giftCertificateDto) {
+        GiftCertificate giftCertificate = modelMapper.map(giftCertificateDto, GiftCertificate.class);
+        if (giftCertificateDto.getTags() != null) {
+            Set<Tag> tags = (giftCertificateDto.getTags().stream()
                     .map(tagMapper::toEntity).collect(Collectors.toSet()));
             giftCertificate.setTags(tags);
         }
@@ -40,5 +40,8 @@ public class ServiceGiftCertificateMapper {
             giftCertificateDto.setTags(tags);
         }
         return giftCertificateDto;
+    }
+    public GiftCertificateInputDto toDto(GiftCertificateDto giftCertificateCreateDto) {
+        return modelMapper.map(giftCertificateCreateDto, GiftCertificateInputDto.class);
     }
 }

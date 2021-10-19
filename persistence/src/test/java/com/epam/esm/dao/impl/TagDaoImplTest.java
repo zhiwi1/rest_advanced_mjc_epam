@@ -33,17 +33,17 @@ class TagDaoImplTest {
 
     public static Object[][] createTags() {
         return new Object[][]{
-                {new Tag(5, "1")},
-                {new Tag(6, "2")},
-                {new Tag(7, "3")}
+                {new Tag(5L, "1")},
+                {new Tag(6L, "2")},
+                {new Tag(7L, "3")}
         };
     }
 
     public static Object[][] createTagsTogether() {
         return new Object[][]{
-                {new Tag(5, "1"), new Tag(6, "2"), new Tag(7, "3")},
-                {new Tag(512412421, ""), new Tag(61, "2 das"), new Tag(7, "3")},
-                {new Tag(5, "1"), new Tag(123, "dsa ds2"), new Tag(132321237, "3ccz")}
+                {new Tag(5L, "1"), new Tag(6, "2"), new Tag(7, "3")},
+                {new Tag(512412421L, ""), new Tag(61, "2 das"), new Tag(7, "3")},
+                {new Tag(5L, "1"), new Tag(123, "dsa ds2"), new Tag(132321237, "3ccz")}
         };
     }
 

@@ -17,7 +17,7 @@ public interface TagService extends BaseService<TagDto, Long> {
      * @param giftCertificateId the gift certificate id
      * @return the set of TagDto
      */
-    Set<TagDto> findTagsByGiftCertificateId(Long giftCertificateId);
+
 
     /**
      * Attach tag to certificate.

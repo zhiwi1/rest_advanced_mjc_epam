@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -15,7 +16,7 @@ import javax.validation.constraints.Size;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TagDto {
+public class TagDto extends RepresentationModel<TagDto> {
     @Range(min = 0)
     private long id;
     @Size(min=2,max=100)

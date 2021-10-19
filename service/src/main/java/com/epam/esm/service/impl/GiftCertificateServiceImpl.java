@@ -27,9 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateDao giftCertificateDao;
-    private final TagDao tagDao;
     private final ServiceGiftCertificateMapper certificateMapper;
-    private final ServiceTagMapper tagMapper;
     private final ServicePageMapper pageMapper;
 
     @Transactional
@@ -58,7 +56,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public GiftCertificateDto findById(Long id) {
         Optional<GiftCertificate> foundGiftCertificate = giftCertificateDao.findById(id);
         return foundGiftCertificate
-                .map(this::convertGiftCertificateAndSetTags)
+                .map(certificateMapper::toDto)
                 .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
@@ -67,10 +65,10 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public List<GiftCertificateDto> findGiftCertificates(
             GiftCertificateQueryParamDto giftCertificateQueryParametersDto, PageDto pageDto) {
         Page page = pageMapper.toEntity(pageDto);
-        List<GiftCertificate> foundGiftCertificates
-                = giftCertificateDao.findByQueryParameters(GiftCertificateQueryCreator.createQuery(giftCertificateQueryParametersDto), page);
+        List<GiftCertificate> foundGiftCertificates=
+                giftCertificateDao.findByQueryParameters(GiftCertificateQueryCreator.createQuery(giftCertificateQueryParametersDto), page);
         return foundGiftCertificates.stream()
-                .map(this::convertGiftCertificateAndSetTags)
+                .map(certificateMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -92,15 +90,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             throw new ResourceNotFoundException(id);
         }
         giftCertificateDao.delete(id);
-    }
-
-    private GiftCertificateDto convertGiftCertificateAndSetTags(GiftCertificate giftCertificate) {
-        GiftCertificateDto giftCertificateDto = certificateMapper.toDto(giftCertificate);
-        System.out.println(1);
-        List<Tag> listOfTags = tagDao.findByCertificateId(giftCertificate.getId());
-        Set<TagDto> set = listOfTags.stream().map(tagMapper::toDto).collect(Collectors.toSet());
-        giftCertificateDto.setTags(set);
-        return giftCertificateDto;
     }
 
 

@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -68,25 +69,21 @@ public class TagServiceImpl implements TagService {
         if (tag.isEmpty()) {
             throw new ResourceNotFoundException(id);
         }
-        giftCertificateDao.findIdByTagId(id).ifPresent(giftCertificateDao::updateLastDate);
+        Optional<Long> idOfGiftCertificate = giftCertificateDao.findIdByTagId(id);
+        idOfGiftCertificate.ifPresent(giftCertificateDao::updateLastDate);
         tagDao.delete(id);
     }
 
-    @Override
-    public Set<TagDto> findTagsByGiftCertificateId(Long giftCertificateId) {
-        List<Tag> tag = tagDao.findByCertificateId(giftCertificateId);
-        return tag.stream().map(tagMapper::toDto).collect(Collectors.toSet());
-    }
 
     @Transactional
     @Override
     public void attachTag(CertificateTagDto certificateTagDto) {
-        Optional<Tag> tag = tagDao.findById(certificateTagDto.getCertificateId());
+        Optional<Tag> tag = tagDao.findById(certificateTagDto.getTagId());
         Optional<GiftCertificate> giftCertificate = giftCertificateDao.findById(certificateTagDto.getCertificateId());
         if (tag.isEmpty() || giftCertificate.isEmpty()) {
             throw new ResourceNotFoundException(certificateTagDto.getCertificateId(), certificateTagDto.getTagId());
         }
-        tagDao.attachTag(certificateTagDto.getTagId(), certificateTagDto.getCertificateId());
+        tagDao.attachTag(tag.get(), giftCertificate.get());
         giftCertificateDao.updateLastDate(certificateTagDto.getCertificateId());
     }
 }

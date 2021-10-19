@@ -4,6 +4,7 @@ import com.epam.esm.dao.UserDao;
 import com.epam.esm.entity.User;
 
 import com.epam.esm.util.Page;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -12,11 +13,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class UserDaoImpl implements UserDao {
-
     private static final String FIND_ALL = "SELECT u FROM User u";
-//    private static final String FIND_BY_HIGHEST_COST_OF_ALL_ORDERS = "SELECT u FROM User u WHERE u.id IN "
-//            + "(SELECT o.userId FROM Order o GROUP BY o.userId ORDER BY SUM(o.price) DESC)";
+    private static final String FIND_BY_HIGHEST_COST_OF_ALL_ORDERS = "SELECT u FROM User u WHERE u.id IN"
+            + " (SELECT o.userId FROM Order o GROUP BY o.userId ORDER BY SUM(o.price) DESC)";
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -37,11 +39,11 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findByHighestCostOfAllOrders() {
-        return null;
+        return entityManager.createQuery(FIND_BY_HIGHEST_COST_OF_ALL_ORDERS, User.class)
+                .setMaxResults(1)
+                .getResultList().stream()
+                .findFirst();
     }
-//        return entityManager.createQuery(FIND_BY_HIGHEST_COST_OF_ALL_ORDERS, User.class)
-//                .setMaxResults(1)
-//                .getResultList().stream()
-//                .findFirst();
-//    }
+
+
 }
