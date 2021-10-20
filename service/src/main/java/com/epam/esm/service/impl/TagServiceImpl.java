@@ -2,12 +2,14 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.TagDao;
+import com.epam.esm.dao.UserDao;
 import com.epam.esm.dto.CertificateTagDto;
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagCreateDto;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.User;
 import com.epam.esm.exception.DublicateResourceException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.ServicePageMapper;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TagServiceImpl implements TagService {
     private final TagDao tagDao;
+    private final UserDao userDao;
     private final GiftCertificateDao giftCertificateDao;
     private final ServiceTagMapper tagMapper;
     private final ServicePageMapper pageMapper;
@@ -85,5 +88,16 @@ public class TagServiceImpl implements TagService {
         }
         tagDao.attachTag(tag.get(), giftCertificate.get());
         giftCertificateDao.updateLastDate(certificateTagDto.getCertificateId());
+    }
+
+    @Transactional
+    @Override
+    public Optional<Tag> findMostPopularTagWithHighestCostOfAllOrders() {
+        Optional<User> user = userDao.findByHighestCostOfAllOrders();
+        //todo to entity
+        if (user.isEmpty()) {
+            throw new ResourceNotFoundException();
+        }
+        return tagDao.findMostPopularOfUser(user.get().getId());
     }
 }

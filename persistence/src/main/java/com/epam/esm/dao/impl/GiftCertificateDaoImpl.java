@@ -29,8 +29,8 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private static final String FIND_BY_NAME = "SELECT g FROM GiftCertificate g WHERE g.name = :name";
     private static final String FIND_BY_QUERY_PARAM = "SELECT certificates.id,certificates.name, "
             + "description, price, duration, create_date, last_update_date FROM certificates "
-            + "LEFT JOIN certificate_tags ON certificates.id = certificate_tags.certificate_id "
-            + "LEFT JOIN tags ON certificate_tags.tag_id = tags.id ";
+            + "JOIN certificate_tags ON certificates.id = certificate_tags.certificate_id "
+            + "JOIN tags ON certificate_tags.tag_id = tags.id ";
     private static final String SQL_UPDATE_LAST_UPD_DATE = "UPDATE GiftCertificate g SET g.lastUpdateDate =:lastUpdateDate WHERE g.id=:certificateId";
 
     @PersistenceContext

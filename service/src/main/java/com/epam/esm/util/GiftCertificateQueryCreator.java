@@ -7,7 +7,7 @@ import java.text.MessageFormat;
 
 @UtilityClass
 public class GiftCertificateQueryCreator {
-    private static final String TAG_NAME = "tags.name LIKE '%s'";
+    private static final String TAG_NAME = "tags.name LIKE ''%{0}%''";
     private static final String WHERE = " WHERE ";
     private static final String AND = " AND ";
     private static final String NAME = "certificates.name LIKE ''%{0}%''";
@@ -16,18 +16,20 @@ public class GiftCertificateQueryCreator {
 
     public static String createQuery(GiftCertificateQueryParamDto giftCertificateQueryParameters) {
         StringBuilder condition = new StringBuilder();
-        addTagName(giftCertificateQueryParameters, condition);
         addName(giftCertificateQueryParameters, condition);
         addDescription(giftCertificateQueryParameters, condition);
+        addTagName(giftCertificateQueryParameters, condition);
         condition.append(GROUP_BY);
         addSortType(giftCertificateQueryParameters, condition);
+        System.out.println(condition);
         return condition.toString();
     }
 
     private static void addTagName(GiftCertificateQueryParamDto giftCertificateQueryParameters, StringBuilder condition) {
-        if (giftCertificateQueryParameters.getTagName() != null) {
+        if (giftCertificateQueryParameters.getTagNames() != null) {
+            for (String tagName:giftCertificateQueryParameters.getTagNames()){
             addOperator(condition);
-            condition.append(String.format(TAG_NAME, giftCertificateQueryParameters.getTagName()));
+            condition.append(MessageFormat.format(TAG_NAME, tagName));}
         }
     }
 
@@ -50,8 +52,8 @@ public class GiftCertificateQueryCreator {
     private static void addSortType(GiftCertificateQueryParamDto giftCertificateQueryParameters, StringBuilder condition) {
         if (giftCertificateQueryParameters.getSortType() != null) {
             condition.append(giftCertificateQueryParameters.getSortType().getSqlExpression());
-            if (giftCertificateQueryParameters.getOrderType() != null) {
-                condition.append(giftCertificateQueryParameters.getOrderType().getSqlExpression());
+            if (giftCertificateQueryParameters.getSortType() != null) {
+                condition.append(giftCertificateQueryParameters.getSortType().getSqlExpression());
             }
         }
     }

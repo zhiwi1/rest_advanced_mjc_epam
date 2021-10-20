@@ -4,6 +4,7 @@ import com.epam.esm.dto.CertificateTagDto;
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagCreateDto;
 import com.epam.esm.dto.TagDto;
+import com.epam.esm.entity.Tag;
 import com.epam.esm.hateoas.LinkMapper;
 import com.epam.esm.service.TagService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -60,6 +62,11 @@ public class TagController {
     @PostMapping("/attach")
     public void attachTag(@Valid @RequestBody CertificateTagDto certificateTagDto) {
         tagService.attachTag(certificateTagDto);
+    }
+
+    @GetMapping("/popular")
+    public Optional<Tag> findMostPopularTagWithHighestCostOfAllOrders() {
+        return tagService.findMostPopularTagWithHighestCostOfAllOrders();
     }
 
 }

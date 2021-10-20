@@ -31,7 +31,9 @@ import java.util.stream.Collectors;
 public class TagDaoImpl implements TagDao {
     private static final String FIND_ALL = "SELECT tag from Tag tag";
     private static final String FIND_BY_NAME = "SELECT t FROM Tag t WHERE t.name = :name";
-
+    private static final String FIND_MOST_POPULAR_OF_USER = "SELECT t FROM GiftCertificate g INNER JOIN g.tags t "
+            + "WHERE g.id IN (SELECT o.giftCertificateId FROM Order o "
+            + "WHERE o.userId = :userId) GROUP BY t.id ORDER BY COUNT(t.id) DESC";
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -76,5 +78,12 @@ public class TagDaoImpl implements TagDao {
         giftCertificate.getTags().add(tag);
         entityManager.merge(giftCertificate);
     }
-
+    @Override
+    public Optional<Tag> findMostPopularOfUser(long userId) {
+        return entityManager.createQuery(FIND_MOST_POPULAR_OF_USER, Tag.class)
+                .setParameter("userId", userId)
+                .setMaxResults(1)
+                .getResultList().stream()
+                .findFirst();
+    }
 }

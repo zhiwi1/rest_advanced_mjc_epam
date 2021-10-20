@@ -16,9 +16,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserDaoImpl implements UserDao {
     private static final String FIND_ALL = "SELECT u FROM User u";
-    private static final String FIND_BY_HIGHEST_COST_OF_ALL_ORDERS = "SELECT u FROM User u WHERE u.id IN"
-            + " (SELECT o.userId FROM Order o GROUP BY o.userId ORDER BY SUM(o.price) DESC)";
-
+    private static final String FIND_BY_HIGHEST_COST_OF_ALL_ORDERS = "SELECT u FROM User u WHERE u.id IN "
+            + "(SELECT o.userId FROM Order o GROUP BY o.userId ORDER BY SUM(o.price) DESC)";
     @PersistenceContext
     private EntityManager entityManager;
 

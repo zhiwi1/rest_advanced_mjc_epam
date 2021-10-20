@@ -3,7 +3,9 @@ package com.epam.esm.service;
 import com.epam.esm.dto.CertificateTagDto;
 import com.epam.esm.dto.TagCreateDto;
 import com.epam.esm.dto.TagDto;
+import com.epam.esm.entity.Tag;
 
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -33,5 +35,6 @@ public interface TagService extends BaseService<TagDto, Long> {
      * @return the tag dto
      */
     TagDto create(TagCreateDto tagCreateDto);
+    public Optional<Tag> findMostPopularTagWithHighestCostOfAllOrders();
 }
 
