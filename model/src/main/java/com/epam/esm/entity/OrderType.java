@@ -9,11 +9,11 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @Getter
 public enum OrderType {
-    NAME("name", " ORDER BY name"),
-    CREATE_DATE("date", " ORDER BY create_date");
+    NAME("name"),
+    CREATE_DATE("createDate");
 
     private final String name;
-    private final String sqlExpression;
+
 
     @JsonCreator
     public static OrderType decode(final String code) {

@@ -1,7 +1,7 @@
 package com.epam.esm.config;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 
-@SpringBootApplication(scanBasePackages = "com.epam.esm")
+@SpringBootConfiguration
 public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private WebConfigParam webConfigParam;

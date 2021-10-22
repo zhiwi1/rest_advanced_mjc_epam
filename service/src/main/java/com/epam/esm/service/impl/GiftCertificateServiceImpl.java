@@ -1,17 +1,15 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
-import com.epam.esm.dao.TagDao;
 import com.epam.esm.dto.*;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.DublicateResourceException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.ServiceGiftCertificateMapper;
+import com.epam.esm.mapper.ServiceGiftCertificateQueryParamMapper;
 import com.epam.esm.mapper.ServicePageMapper;
-import com.epam.esm.mapper.ServiceTagMapper;
 import com.epam.esm.service.GiftCertificateService;
-import com.epam.esm.util.GiftCertificateQueryCreator;
+import com.epam.esm.util.GiftCertificateQueryParam;
 import com.epam.esm.util.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -29,6 +26,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateDao giftCertificateDao;
     private final ServiceGiftCertificateMapper certificateMapper;
     private final ServicePageMapper pageMapper;
+    private final ServiceGiftCertificateQueryParamMapper queryParamMapper;
 
     @Transactional
     @Override
@@ -65,8 +63,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public List<GiftCertificateDto> findGiftCertificates(
             GiftCertificateQueryParamDto giftCertificateQueryParametersDto, PageDto pageDto) {
         Page page = pageMapper.toEntity(pageDto);
-        List<GiftCertificate> foundGiftCertificates=
-                giftCertificateDao.findByQueryParameters(GiftCertificateQueryCreator.createQuery(giftCertificateQueryParametersDto), page);
+        GiftCertificateQueryParam queryParam = queryParamMapper.toEntity(giftCertificateQueryParametersDto);
+        List<GiftCertificate> foundGiftCertificates =
+                giftCertificateDao.findByQueryParameters(queryParam, page);
         return foundGiftCertificates.stream()
                 .map(certificateMapper::toDto)
                 .collect(Collectors.toList());

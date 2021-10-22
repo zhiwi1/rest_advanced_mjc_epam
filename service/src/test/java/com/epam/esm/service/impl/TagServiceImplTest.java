@@ -63,12 +63,7 @@ class TagServiceImplTest {
         };
     }
 
-    public static Object[][] createTagsAndDto() {
-        return new Object[][]{
-                {new Tag(1, "ab"), new TagDto(1, "ab")},
-                {new Tag(5, "bc"), new TagDto(5, "bc")}
-        };
-    }
+2
 
     public static Object[][] createDoubleTags() {
         return new Object[][]{

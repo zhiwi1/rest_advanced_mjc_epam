@@ -22,6 +22,7 @@ public class LinkMapper {
     private final ServiceGiftCertificateMapper certificateMapper;
 
     public void mapLinks(TagDto tagDto) {
+        //todo find all with pagination
         tagDto.add(linkTo(methodOn(TagController.class).findById(tagDto.getId())).withSelfRel());
         tagDto.add(linkTo(methodOn(TagController.class).delete(tagDto.getId())).withRel("delete"));
         tagDto.add(linkTo(methodOn(TagController.class).create(new TagCreateDto(tagDto.getName()))).withRel("create"));

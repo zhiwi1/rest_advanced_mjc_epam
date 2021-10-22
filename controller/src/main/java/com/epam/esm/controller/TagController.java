@@ -5,6 +5,7 @@ import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagCreateDto;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.hateoas.LinkMapper;
 import com.epam.esm.service.TagService;
 import lombok.RequiredArgsConstructor;
@@ -38,12 +39,13 @@ public class TagController {
 
     @GetMapping("/{id:\\d+}")
     public TagDto findById(@PathVariable @Range(min = 0) Long id) {
+
         TagDto tagDto = tagService.findById(id);
         linkMapper.mapLinks(tagDto);
         return tagDto;
     }
 
-    @PostMapping
+    @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public TagDto create(@Valid @RequestBody TagCreateDto tagCreateDto) {
         TagDto tagDto = tagService.create(tagCreateDto);
