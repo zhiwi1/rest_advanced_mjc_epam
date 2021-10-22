@@ -9,13 +9,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Component;
 
-@SpringBootConfiguration
-@SpringBootApplication
-@ComponentScan("com.epam.esm")
+@SpringBootApplication(scanBasePackages = "com.epam.esm")
 @EntityScan("com.epam.esm")
 public class DatabaseConfig {
-    @Autowired
-    private  TagDao tagDao;
+
 }
 
 

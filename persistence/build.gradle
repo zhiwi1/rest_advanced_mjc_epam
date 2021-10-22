@@ -7,7 +7,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.5'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.5.5'
     implementation 'junit:junit:4.13.1'
+    implementation 'cn.danielw:spring-jdbc-template:0.2.1'
     testImplementation 'com.h2database:h2:1.4.200'
     runtimeOnly 'mysql:mysql-connector-java:8.0.26'
     implementation project(':model')
+}
+
+repositories {
+    mavenCentral()
 }

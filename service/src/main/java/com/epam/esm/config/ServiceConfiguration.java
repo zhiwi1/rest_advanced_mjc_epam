@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -25,8 +26,16 @@ public class ServiceConfiguration {
         return mapper;
     }
 
-    @Bean
-    public TransactionManager transactionManager(DataSource dataSource) {
-        return new DataSourceTransactionManager(dataSource);
-    }
+//    @Bean
+//    public TransactionManager transactionManager(DataSource dataSource) {
+//        return new DataSourceTransactionManager(dataSource);
+//    }
+//@Bean
+//public PlatformTransactionManager transactionManager(){
+//    JpaTransactionManager transactionManager
+//            = new JpaTransactionManager();
+//    transactionManager.setEntityManagerFactory(
+//            entityManagerFactoryBean().getObject() );
+//    return transactionManager;
+//}
 }
