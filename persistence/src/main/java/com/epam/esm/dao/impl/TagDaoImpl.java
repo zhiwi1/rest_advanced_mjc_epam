@@ -78,12 +78,14 @@ public class TagDaoImpl implements TagDao {
         giftCertificate.getTags().add(tag);
         entityManager.merge(giftCertificate);
     }
+    //todo one request
     @Override
     public Optional<Tag> findMostPopularOfUser(long userId) {
         return entityManager.createQuery(FIND_MOST_POPULAR_OF_USER, Tag.class)
                 .setParameter("userId", userId)
                 .setMaxResults(1)
-                .getResultList().stream()
+                .getResultList()
+                .stream()
                 .findFirst();
     }
 }

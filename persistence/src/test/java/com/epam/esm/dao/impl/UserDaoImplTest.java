@@ -24,7 +24,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = DatabaseConfig.class)
 class UserDaoImplTest {
 
@@ -91,6 +90,6 @@ class UserDaoImplTest {
     @Test
     void findByHighestCostOfAllOrdersShouldReturnUserOptionalTest() {
         Optional<User> actual = userDao.findByHighestCostOfAllOrders();
-        assertEquals(Optional.empty(), actual);
+        assertEquals(Optional.of(new User(1L,"Oleg")), actual);
     }
 }

@@ -21,15 +21,9 @@ import java.util.List;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
-    @Column(name = "price")
     private BigDecimal price;
-    @Column(name = "create_date")
     private ZonedDateTime createDate;
-    @Column(name = "user_id")
     private Long userId;
-    @Column(name = "certificate_id")
     private Long giftCertificateId;
-
 }

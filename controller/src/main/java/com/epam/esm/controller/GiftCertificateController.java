@@ -32,7 +32,7 @@ public class GiftCertificateController {
         PageDto pageDto = new PageDto(page, size);
         return giftCertificateService.findGiftCertificates(giftCertificateQueryParametersDto, pageDto);
     }
-
+//todo 409, 404 find by id
     @GetMapping("/{id:\\d+}")
     public GiftCertificateDto findById(@Range(min = 0) @PathVariable Long id) {
         GiftCertificateDto giftCertificateDto = giftCertificateService.findById(id);

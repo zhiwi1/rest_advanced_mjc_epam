@@ -25,7 +25,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = DatabaseConfig.class)
 @Transactional
 class GiftCertificateDaoImplTest {
@@ -118,7 +117,7 @@ class GiftCertificateDaoImplTest {
     @Test
     void shouldReturnUpdatedCertificateTest() {
         GiftCertificate expected = new GiftCertificate( "a", "b", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>());
-        expected.setId(11);
+        expected.setId(14);
         GiftCertificate actual = giftCertificateDao.update(expected);
         assertEquals(expected, actual);
     }

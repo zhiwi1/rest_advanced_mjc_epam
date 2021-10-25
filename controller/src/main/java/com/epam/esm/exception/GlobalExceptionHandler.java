@@ -70,7 +70,7 @@ class GlobalExceptionHandler {
 
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public Set<ExceptionResponse> handleResourceNotFoundException(
             ResourceNotFoundException e, Locale locale) {
         Set<String> exceptionMessage = exceptionMessageCreator.createMessage(e.getErrorMessageKey(),

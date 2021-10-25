@@ -17,24 +17,17 @@ import java.util.Set;
 public class GiftCertificate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private long id;
-    @Column(name = "name")
     @NonNull
     private String name;
-    @Column(name = "description")
     @NonNull
     private String description;
-    @Column(name = "price")
     @NonNull
     private BigDecimal price;
-    @Column(name = "create_date")
     @NonNull
     private ZonedDateTime createDate;
-    @Column(name = "last_update_date")
     @NonNull
     private ZonedDateTime lastUpdateDate;
-    @Column(name = "duration")
     @NonNull
     private int duration;
     @ManyToMany(cascade = { CascadeType.ALL})

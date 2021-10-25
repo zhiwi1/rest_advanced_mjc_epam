@@ -6,7 +6,7 @@ INSERT INTO certificates (name, description, price, duration, create_date, last_
 VALUES ('Travelling', 'You will like it', 1000, 5, '2015-01-12 11:00:00', '2021-01-01 20:00:00');
 INSERT INTO certificates (name, description, price, duration, create_date, last_update_date)
 VALUES ('Museum', 'It is nice', 75, 2, '2018-05-16 12:00:00', '2019-01-01 21:00:00');
---
+
 INSERT INTO tags (name)
 VALUES ('home');
 INSERT INTO tags (name)

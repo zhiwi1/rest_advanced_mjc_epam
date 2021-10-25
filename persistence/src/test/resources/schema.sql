@@ -39,7 +39,7 @@ CREATE TABLE  `certificate_tags`
 
 CREATE TABLE `users`
 (
-    `id`   BIGINT      NOT NULL,
+    `id`   BIGINT      NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(45) NULL,
     PRIMARY KEY (`id`)
 )

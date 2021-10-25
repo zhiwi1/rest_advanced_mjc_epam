@@ -40,7 +40,8 @@ public class UserDaoImpl implements UserDao {
     public Optional<User> findByHighestCostOfAllOrders() {
         return entityManager.createQuery(FIND_BY_HIGHEST_COST_OF_ALL_ORDERS, User.class)
                 .setMaxResults(1)
-                .getResultList().stream()
+                .getResultList()
+                .stream()
                 .findFirst();
     }
 

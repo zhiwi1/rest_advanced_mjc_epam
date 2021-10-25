@@ -62,6 +62,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
         certificate.setCreateDate(ZonedDateTime.now(ZoneId.systemDefault()));
         certificate.setLastUpdateDate(ZonedDateTime.now(ZoneId.systemDefault()));
         entityManager.persist(certificate);
+        //todo save?
         return certificate;
     }
 
@@ -76,13 +77,16 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
         giftCertificate.setLastUpdateDate(ZonedDateTime.now(ZoneId.systemDefault()));
         return entityManager.merge(giftCertificate);
     }
-
+//todo ask
     @Override
     public Optional<Long> findIdByTagId(Long tagId) {
-        return Optional.ofNullable((Long) entityManager.createNativeQuery(
+        return entityManager.createNativeQuery(
                         "SELECT certificate_id FROM certificate_tags where certificate_tags.tag_id=:tagId")
                 .setParameter("tagId", tagId)
-                .getSingleResult());
+                .setMaxResults(1)
+                .getResultList()
+                .stream()
+                .findFirst();
 
     }
 
@@ -100,12 +104,11 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
 
-
     @Override
     public void updateLastDate(Long id) {
         entityManager.createQuery(SQL_UPDATE_LAST_UPD_DATE)
-                .setParameter("lastUpdateDate",ZonedDateTime.now(ZoneId.systemDefault()))
-                .setParameter("certificateId",id)
+                .setParameter("lastUpdateDate", ZonedDateTime.now(ZoneId.systemDefault()))
+                .setParameter("certificateId", id)
                 .executeUpdate();
     }
 }
