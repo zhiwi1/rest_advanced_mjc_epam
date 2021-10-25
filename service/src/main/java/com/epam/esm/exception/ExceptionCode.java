@@ -6,6 +6,7 @@ import lombok.experimental.UtilityClass;
 public class ExceptionCode {
     public static final int INCORRECT_PARAMETER_VALUE = 40001;
     public static final int RESOURCE_NOT_FOUND = 40002;
+    public static final int DUBLICATE_RESOURCE = 40003;
     public static final int UNSUPPORTED_MEDIA_TYPE = 40504;
 
 }

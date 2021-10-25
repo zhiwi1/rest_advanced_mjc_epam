@@ -1,142 +1,96 @@
-//package com.epam.esm.dao.impl;
-//
-//import com.epam.esm.config.DatabaseConfig;
-//import com.epam.esm.dao.UserDao;
-//import com.epam.esm.entity.User;
-//import com.epam.esm.util.Page;
-//import org.junit.jupiter.api.AfterAll;
-//import org.junit.jupiter.api.BeforeAll;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.extension.ExtendWith;
-//import org.junit.runner.RunWith;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.dao.InvalidDataAccessApiUsageException;
-//import org.springframework.test.context.ContextConfiguration;
-//import org.springframework.test.context.junit.jupiter.SpringExtension;
-//import org.springframework.test.context.junit4.SpringRunner;
-//import org.springframework.test.context.support.AnnotationConfigContextLoader;
-//
-//import java.util.List;
-//import java.util.Optional;
-//
-//import static org.junit.jupiter.api.Assertions.assertThrows;
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//import static org.junit.jupiter.api.Assertions.assertTrue;
-//import static org.junit.jupiter.api.Assertions.assertFalse;
-//
-//@ExtendWith(SpringExtension.class)
-//@ContextConfiguration(
-//        classes = {DatabaseConfig.class},
-//        loader = AnnotationConfigContextLoader.class)
-//class UserDaoImplTest {
-//
-//    private final UserDao userDao;
-//    private static User user1;
-//    private static User user2;
-//    private static Page page1;
-//    private static Page page2;
-//    private static Page page3;
-//
-//    @Autowired
-//    public UserDaoImplTest(UserDao userDao) {
-//        this.userDao = userDao;
-//    }
-//
-//    @BeforeAll
-//    static void setUp() {
-//        user1 = User.builder()
-//                .id(1L)
-//                .name("Oleg")
-//                .build();
-//        user2 = User.builder()
-//                .id(3L)
-//                .name("Ivan")
-//                .build();
-//        page1 = Page.builder()
-//                .number(1)
-//                .size(5)
-//                .build();
-//        page2 = Page.builder()
-//                .number(3)
-//                .size(3)
-//                .build();
-//        page3 = Page.builder()
-//                .number(-3)
-//                .size(3)
-//                .build();
-//    }
-//
-//    @AfterAll
-//    static void tearDown() {
-//        user1 = null;
-//        user2 = null;
-//        page1 = null;
-//        page2 = null;
-//        page3 = null;
-//    }
-//
-//
-//
-//    @Test
-//    void findAllCorrectDataShouldReturnListOfUsersTest() {
-//        // given
-//        long expected = 3;
-//
-//        // when
-//        List<User> actual = userDao.findAll(page1);
-//
-//        // then
-//        assertEquals(expected, actual.size());
-//    }
-//
-//    @Test
-//    void findAllCorrectDataShouldReturnEmptyListTest() {
-//        // when
-//        List<User> actual = userDao.findAll(page2);
-//
-//        // then
-//        assertTrue(actual.isEmpty());
-//    }
-//
-//    @Test
-//    void findAllIncorrectDataShouldThrowExceptionTest() {
-//        // then
-//        assertThrows(InvalidDataAccessApiUsageException.class, () -> userDao.findAll(page3));
-//    }
-//
-//    @Test
-//    void findByIdCorrectDataShouldReturnUserOptionalTest() {
-//        // given
-//        long id = 1;
-//
-//        // when
-//        Optional<User> actual = userDao.findById(id);
-//
-//        // then
-//        assertEquals(Optional.of(user1), actual);
-//    }
-//
-//    @Test
-//    void findByIdCorrectDataShouldReturnEmptyOptionalTest() {
-//        // given
-//        long id = 8;
-//
-//        // when
-//        Optional<User> actual = userDao.findById(id);
-//
-//        // then
-//        assertFalse(actual.isPresent());
-//    }
-//
-//
-//
-//    @Test
-//    void findByHighestCostOfAllOrdersShouldReturnUserOptionalTest() {
-//        // when
-//        Optional<User> actual = userDao.findByHighestCostOfAllOrders();
-//
-//        // then
-//        assertEquals(Optional.of(user2), actual);
-//    }
-//}
+package com.epam.esm.dao.impl;
+
+
+import com.epam.esm.config.DatabaseConfig;
+import com.epam.esm.dao.UserDao;
+import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.User;
+import com.epam.esm.util.Page;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(classes = DatabaseConfig.class)
+class UserDaoImplTest {
+
+    private final UserDao userDao;
+
+    @Autowired
+    public UserDaoImplTest(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    public static Object[][] createUsers() {
+        return new Object[][]{
+                {new User(1L, "Oleg")},
+                {new User(2L, "Gleb")},
+                {new User(3L, "Ivan")}
+        };
+    }
+
+    @Test
+    void findAllCorrectDataShouldReturnListOfUsersTest() {
+        long expected = 3;
+        Page page1 = Page.builder()
+                .number(1)
+                .size(5)
+                .build();
+        List<User> actual = userDao.findAll(page1);
+        assertEquals(expected, actual.size());
+    }
+
+    @Test
+    void findAllCorrectDataShouldReturnEmptyListTest() {
+        Page page2 = Page.builder()
+                .number(3)
+                .size(3)
+                .build();
+        List<User> actual = userDao.findAll(page2);
+        assertTrue(actual.isEmpty());
+    }
+
+    @Test
+    void findAllIncorrectDataShouldThrowExceptionTest() {
+        Page page3 = Page.builder()
+                .number(-3)
+                .size(3)
+                .build();
+        assertThrows(InvalidDataAccessApiUsageException.class, () -> userDao.findAll(page3));
+    }
+
+   @ParameterizedTest
+    @MethodSource("createUsers")
+    void findByIdCorrectDataShouldReturnUserOptionalTest(User user) {
+        long id = user.getId();
+        Optional<User> actual = userDao.findById(id);
+        assertEquals(Optional.of(user), actual);
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = {100, Long.MAX_VALUE, 2123213321})
+    void findByIdCorrectDataShouldReturnEmptyOptionalTest(long id) {
+        Optional<User> actual = userDao.findById(id);
+        assertFalse(actual.isPresent());
+    }
+
+    @Test
+    void findByHighestCostOfAllOrdersShouldReturnUserOptionalTest() {
+        Optional<User> actual = userDao.findByHighestCostOfAllOrders();
+        assertEquals(Optional.empty(), actual);
+    }
+}

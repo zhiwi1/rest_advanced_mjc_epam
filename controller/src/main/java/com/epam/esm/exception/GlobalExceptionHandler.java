@@ -3,9 +3,9 @@ package com.epam.esm.exception;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionFailedException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,14 +38,14 @@ class GlobalExceptionHandler {
 
     }
 
-    @ExceptionHandler(EmptyResultDataAccessException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponse handleEmptyResultDataAccessException(EmptyResultDataAccessException e, Locale locale) {
-        String exceptionMessage = exceptionMessageCreator.createMessage(ExceptionMessageKey.INVALID_INPUT_WITH_PARAM,
-                locale, e.getMessage());
-        log.error(exceptionMessage);
-        return new ExceptionResponse(ExceptionCode.RESOURCE_NOT_FOUND, exceptionMessage);
-    }
+//    @ExceptionHandler(EmptyResultDataAccessException.class)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public ExceptionResponse handleEmptyResultDataAccessException(EmptyResultDataAccessException e, Locale locale) {
+//        String exceptionMessage = exceptionMessageCreator.createMessage(ExceptionMessageKey.INVALID_INPUT_WITH_PARAM,
+//                locale, e.getMessage());
+//        log.error(exceptionMessage);
+//        return new ExceptionResponse(ExceptionCode.RESOURCE_NOT_FOUND, exceptionMessage);
+//    }
 
     @ExceptionHandler(DublicateResourceException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -98,13 +98,20 @@ class GlobalExceptionHandler {
         return new ExceptionResponse(ExceptionCode.UNSUPPORTED_MEDIA_TYPE, exceptionMessage);
     }
 
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionResponse handleRuntimeException(HttpMessageNotReadableException exception, Locale locale) {
+        System.out.println(ExceptionMessageKey.INVALID_INPUT_WITH_PARAM+locale+exception.getHttpInputMessage());
+        String exceptionMessage = exceptionMessageCreator.createMessage(ExceptionMessageKey.INVALID_INPUT, locale);
+        log.error(exceptionMessage);
+        return new ExceptionResponse(ExceptionCode.INCORRECT_PARAMETER_VALUE, exceptionMessage);
+    }
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionResponse handleRuntimeException(RuntimeException exception, Locale locale) {
-        String exceptionMessage = exceptionMessageCreator.createMessage(ExceptionMessageKey.VALUE_NOT_IN_RANGE, locale);
+        String exceptionMessage = exceptionMessageCreator.createMessage(ExceptionMessageKey.INVALID_INPUT, locale);
         log.error(exceptionMessage);
         return new ExceptionResponse(ExceptionCode.INCORRECT_PARAMETER_VALUE, exceptionMessage);
     }
 
 }
-

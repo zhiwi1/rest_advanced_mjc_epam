@@ -11,11 +11,11 @@ public class DublicateResourceException extends ServiceException {
 
     @Override
     public String getErrorMessageKey() {
-        return ExceptionMessageKey.INVALID_INPUT_WITH_PARAM;
+        return ExceptionMessageKey.DUBLICATE_RESOURCE;
     }
 
     @Override
     public int getCode() {
-        return ExceptionCode.INCORRECT_PARAMETER_VALUE;
+        return ExceptionCode.DUBLICATE_RESOURCE;
     }
 }

@@ -31,11 +31,3 @@ allprojects {
         }
     }
 }
-
-dependencies {
-    implementation 'cn.danielw:spring-jdbc-template:0.2.1'
-}
-
-repositories {
-    mavenCentral()
-}

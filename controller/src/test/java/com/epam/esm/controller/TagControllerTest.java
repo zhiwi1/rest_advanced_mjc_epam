@@ -1,5 +1,6 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.config.ApplicationRunner;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.dto.TagCreateDto;
 import com.epam.esm.dto.TagDto;
@@ -24,6 +25,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -74,7 +76,7 @@ class TagControllerTest {
 
     @ParameterizedTest
     @ValueSource(longs = {1, 2, 3})
-    void shouldThrowExceptionWhenFindById(Long id){
+    void shouldThrowExceptionWhenFindById(Long id) {
         doThrow(new ResourceNotFoundException()).when(tagService).findById(any(Long.class));
         String url = "/v1/tags/{id}";
         assertThrows(NestedServletException.class, () -> mockMvc.perform(get(url, id)));
@@ -89,8 +91,8 @@ class TagControllerTest {
 
     @Test
     void shouldReturnCreatedStatusWhenCreate() throws Exception {
-        TagCreateDto tagCreateDto=new TagCreateDto("name");
-        Mockito.when(tagService.create(new TagCreateDto("name"))).thenReturn(new TagDto(1,"name"));
+        TagCreateDto tagCreateDto = new TagCreateDto("name");
+        Mockito.when(tagService.create(new TagCreateDto("name"))).thenReturn(new TagDto(1, "name"));
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(tagCreateDto);
         mockMvc.perform(post("/v1/tags/").contentType(MediaType.APPLICATION_JSON).content(json).characterEncoding("utf-8"))

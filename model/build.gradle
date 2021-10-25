@@ -5,9 +5,4 @@ plugins {
 dependencies {
     implementation 'org.hibernate:hibernate-envers:5.4.27.Final'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.12.5'
-    implementation 'cn.danielw:spring-jdbc-template:0.2.1'
-}
-
-repositories {
-    mavenCentral()
 }

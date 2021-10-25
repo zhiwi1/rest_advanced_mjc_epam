@@ -19,7 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 @Audited
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -28,12 +27,6 @@ public class Order {
     private BigDecimal price;
     @Column(name = "create_date")
     private ZonedDateTime createDate;
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
-//    @ManyToOne
-//    @JoinColumn(name="certificate_id")
-//    private GiftCertificate giftCertificate;
     @Column(name = "user_id")
     private Long userId;
     @Column(name = "certificate_id")

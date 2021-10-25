@@ -35,6 +35,7 @@ public interface TagService extends BaseService<TagDto, Long> {
      * @return the tag dto
      */
     TagDto create(TagCreateDto tagCreateDto);
+
     public Optional<Tag> findMostPopularTagWithHighestCostOfAllOrders();
 }
 
