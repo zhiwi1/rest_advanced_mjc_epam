@@ -92,7 +92,6 @@ public class TagServiceImpl implements TagService {
     @Override
     public Optional<Tag> findMostPopularTagWithHighestCostOfAllOrders() {
         Optional<User> user = userDao.findByHighestCostOfAllOrders();
-        //todo to entity
         if (user.isEmpty()) {
             throw new ResourceNotFoundException();
         }

@@ -4,7 +4,11 @@ import com.epam.esm.controller.GiftCertificateController;
 import com.epam.esm.controller.OrderController;
 import com.epam.esm.controller.TagController;
 import com.epam.esm.controller.UserController;
-import com.epam.esm.dto.*;
+import com.epam.esm.dto.TagCreateDto;
+import com.epam.esm.dto.OrderDto;
+import com.epam.esm.dto.UserDto;
+import com.epam.esm.dto.TagDto;
+import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.mapper.ServiceGiftCertificateMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,7 +26,6 @@ public class LinkMapper {
     private final ServiceGiftCertificateMapper certificateMapper;
 
     public void mapLinks(TagDto tagDto) {
-        //todo find all with pagination
         tagDto.add(linkTo(methodOn(TagController.class).findById(tagDto.getId())).withSelfRel());
         tagDto.add(linkTo(methodOn(TagController.class).delete(tagDto.getId())).withRel("delete"));
         tagDto.add(linkTo(methodOn(TagController.class).create(new TagCreateDto(tagDto.getName()))).withRel("create"));
