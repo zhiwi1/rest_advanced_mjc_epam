@@ -6,20 +6,12 @@ import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
 
 import java.util.Optional;
-import java.util.Set;
 
 
 /**
  * The interface Tag service.
  */
 public interface TagService extends BaseService<TagDto, Long> {
-    /**
-     * Find set of tagDto by gift certificate id .
-     *
-     * @param giftCertificateId the gift certificate id
-     * @return the set of TagDto
-     */
-
 
     /**
      * Attach tag to certificate.
@@ -36,6 +28,11 @@ public interface TagService extends BaseService<TagDto, Long> {
      */
     TagDto create(TagCreateDto tagCreateDto);
 
-    public Optional<Tag> findMostPopularTagWithHighestCostOfAllOrders();
+    /**
+     * Find most popular tag with highest cost of all orders optional.
+     *
+     * @return the optional of tag
+     */
+    Optional<Tag> findMostPopularTagWithHighestCostOfAllOrders();
 }
 

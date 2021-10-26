@@ -18,13 +18,10 @@ import com.epam.esm.service.TagService;
 import com.epam.esm.util.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -99,6 +96,6 @@ public class TagServiceImpl implements TagService {
         if (user.isEmpty()) {
             throw new ResourceNotFoundException();
         }
-        return tagDao.findMostPopularOfUser(user.get().getId());
+        return tagDao.findMostPopularOfUser();
     }
 }

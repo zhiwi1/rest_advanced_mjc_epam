@@ -6,23 +6,12 @@ import com.epam.esm.entity.Tag;
 import com.epam.esm.util.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.Types;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Repository
@@ -31,9 +20,12 @@ import java.util.stream.Collectors;
 public class TagDaoImpl implements TagDao {
     private static final String FIND_ALL = "SELECT tag from Tag tag";
     private static final String FIND_BY_NAME = "SELECT t FROM Tag t WHERE t.name = :name";
-    private static final String FIND_MOST_POPULAR_OF_USER = "SELECT t FROM GiftCertificate g INNER JOIN g.tags t "
-            + "WHERE g.id IN (SELECT o.giftCertificateId FROM Order o "
-            + "WHERE o.userId = :userId) GROUP BY t.id ORDER BY COUNT(t.id) DESC";
+    private static final String FIND_THE_MOST_WIDELY_USED_TAG =
+            "  select tags.name,tags.id from tags " +
+                    "join certificate_tags on tags.id=certificate_tags.tag_id where certificate_tags.certificate_id in " +
+                    " (select certificate_id from certificate_orders where user_id= " +
+                    "(select user_id from certificate_orders group by user_id order by sum(price) desc limit 1) )";
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -78,12 +70,10 @@ public class TagDaoImpl implements TagDao {
         giftCertificate.getTags().add(tag);
         entityManager.merge(giftCertificate);
     }
-    //todo one request
+
     @Override
-    public Optional<Tag> findMostPopularOfUser(long userId) {
-        return entityManager.createQuery(FIND_MOST_POPULAR_OF_USER, Tag.class)
-                .setParameter("userId", userId)
-                .setMaxResults(1)
+    public Optional<Tag> findMostPopularOfUser() {
+        return entityManager.createNativeQuery(FIND_THE_MOST_WIDELY_USED_TAG, Tag.class)
                 .getResultList()
                 .stream()
                 .findFirst();

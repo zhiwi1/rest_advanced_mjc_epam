@@ -1,9 +1,21 @@
 package com.epam.esm.entity;
 
-import lombok.*;
+import lombok.RequiredArgsConstructor;
+import lombok.NonNull;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.CascadeType;
+
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Set;

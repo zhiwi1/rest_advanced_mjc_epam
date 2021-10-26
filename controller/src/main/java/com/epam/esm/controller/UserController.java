@@ -7,17 +7,18 @@ import com.epam.esm.hateoas.LinkMapper;
 import com.epam.esm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Range;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/users")
-@Validated
+@RequestMapping("/v2/users")
 @RequiredArgsConstructor
+@Validated
 public class UserController {
     private final UserService userService;
     private final LinkMapper linkMapper;

@@ -30,5 +30,5 @@ public class OrderDto extends RepresentationModel<OrderDto> {
     @Range(min = 1)
     private Long userId;
     @Range(min = 1)
-    private Long giftCertificateId;
+    private Long certificateId;
 }

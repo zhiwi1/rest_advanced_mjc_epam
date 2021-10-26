@@ -5,12 +5,10 @@ import com.epam.esm.dao.OrderDao;
 import com.epam.esm.entity.Order;
 import com.epam.esm.util.Page;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -40,7 +38,7 @@ class OrderDaoImplTest {
                 .createDate(ZonedDateTime.now())
                 .price(new BigDecimal("100"))
                 .userId(1L)
-                .giftCertificateId(2L)
+                .certificateId(2L)
                 .build();
         Order actual = orderDao.create(order);
         assertNotNull(actual);
@@ -53,7 +51,7 @@ class OrderDaoImplTest {
                 .createDate(ZonedDateTime.now())
                 .price(new BigDecimal("100"))
                 .userId(1L)
-                .giftCertificateId(2L)
+                .certificateId(2L)
                 .build();
         orderDao.create(order);
         assertEquals(expected, order.getId());
@@ -66,7 +64,7 @@ class OrderDaoImplTest {
                 .createDate(ZonedDateTime.now())
                 .price(new BigDecimal("100"))
                 .userId(1L)
-                .giftCertificateId(2L)
+                .certificateId(2L)
                 .build();
         assertThrows(InvalidDataAccessApiUsageException.class, () -> orderDao.create(order));
     }
@@ -77,7 +75,7 @@ class OrderDaoImplTest {
                 .createDate(ZonedDateTime.now())
                 .price(new BigDecimal("100000000000"))
                 .userId(1L)
-                .giftCertificateId(2L)
+                .certificateId(2L)
                 .build();
         assertThrows(DataIntegrityViolationException.class, () -> orderDao.create(order));
     }
@@ -90,7 +88,7 @@ class OrderDaoImplTest {
                 .createDate(ZonedDateTime.of(LocalDateTime.of(2019, 1, 1, 21, 0, 0), ZoneId.systemDefault()))
                 .price(new BigDecimal("1000"))
                 .userId(1L)
-                .giftCertificateId(2L)
+                .certificateId(2L)
                 .build();
         long id = 1;
         Optional<Order> actual = orderDao.findById(id);

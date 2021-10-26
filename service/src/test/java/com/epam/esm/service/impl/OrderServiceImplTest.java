@@ -15,15 +15,11 @@ import com.epam.esm.util.Page;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -66,37 +62,37 @@ class OrderServiceImplTest {
                 .createDate(zonedDateTime)
                 .price(new BigDecimal("100"))
                 .userId(1L)
-                .giftCertificateId(2L)
+                .certificateId(2L)
                 .build();
         order2 = Order.builder()
                 .id(1L)
                 .createDate(zonedDateTime)
                 .price(new BigDecimal("1000"))
                 .userId(1L)
-                .giftCertificateId(2L)
+                .certificateId(2L)
                 .build();
         orderDto1 = OrderDto.builder()
                 .id(1L)
                 .createDate(zonedDateTime)
                 .price(new BigDecimal("100"))
                 .userId(1L)
-                .giftCertificateId(2L)
+                .certificateId(2L)
                 .build();
         orderDto2 = OrderDto.builder()
                 .userId(1L)
-                .giftCertificateId(2L)
+                .certificateId(2L)
                 .build();
         orderDto3 = OrderDto.builder()
                 .id(1L)
                 .createDate(zonedDateTime)
                 .price(new BigDecimal("1000"))
                 .userId(1L)
-                .giftCertificateId(2L)
+                .certificateId(2L)
                 .build();
         orderDto4 = OrderDto.builder()
                 .id(-1L)
                 .userId(1L)
-                .giftCertificateId(2L)
+                .certificateId(2L)
                 .build();
         giftCertificateDto1 = GiftCertificateDto.builder()
                 .name("Cinema")

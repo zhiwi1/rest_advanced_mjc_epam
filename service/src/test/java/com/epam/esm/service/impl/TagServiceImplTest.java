@@ -3,8 +3,6 @@ package com.epam.esm.service.impl;
 import com.epam.esm.config.ServiceConfiguration;
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.TagDao;
-import com.epam.esm.dao.impl.GiftCertificateDaoImpl;
-import com.epam.esm.dao.impl.TagDaoImpl;
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagCreateDto;
 import com.epam.esm.dto.TagDto;
@@ -13,22 +11,19 @@ import com.epam.esm.exception.DublicateResourceException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.ServiceTagMapper;
 import com.epam.esm.service.TagService;
-import com.epam.esm.service.impl.TagServiceImpl;
 import com.epam.esm.util.Page;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.*;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -57,8 +52,8 @@ class TagServiceImplTest {
 
     public static Object[][] createTagsAndDto() {
         return new Object[][]{
-                {new Tag( "ab"), new TagDto(1, "ab")},
-                {new Tag( "bc"), new TagDto(5, "bc")}
+                {new Tag("ab"), new TagDto(1, "ab")},
+                {new Tag("bc"), new TagDto(5, "bc")}
         };
     }
 
@@ -92,7 +87,7 @@ class TagServiceImplTest {
     @ParameterizedTest
     @MethodSource("createTagsAndDto")
     void shouldReturnTagDtoWhenFindByIdTest(Tag tag, TagDto tagDto) {
-        long id=tagDto.getId();
+        long id = tagDto.getId();
         tag.setId(id);
         when(tagDao.findById(any(Long.class))).thenReturn(Optional.of(tag));
         TagDto actual = tagService.findById(id);
@@ -110,7 +105,7 @@ class TagServiceImplTest {
     @ParameterizedTest
     @ValueSource(longs = {1213, 23, 10000000})
     void shouldNotThrowExceptionWhenDeleteTagTest(long id) {
-        when(tagDao.findById(any(long.class))).thenReturn(Optional.of(new Tag( "hello")));
+        when(tagDao.findById(any(long.class))).thenReturn(Optional.of(new Tag("hello")));
         doNothing().when(tagDao).delete(any(long.class));
         assertDoesNotThrow(() -> tagService.delete(id));
     }

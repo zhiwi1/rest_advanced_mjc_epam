@@ -26,11 +26,8 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     private static final String FIND_ALL = "SELECT g FROM GiftCertificate g";
     private static final String FIND_BY_NAME = "SELECT g FROM GiftCertificate g WHERE g.name = :name";
-    private static final String FIND_BY_QUERY_PARAM = "SELECT certificates.id,certificates.name, "
-            + "description, price, duration, create_date, last_update_date FROM certificates "
-            + "JOIN certificate_tags ON certificates.id = certificate_tags.certificate_id "
-            + "JOIN tags ON certificate_tags.tag_id = tags.id ";
     private static final String SQL_UPDATE_LAST_UPD_DATE = "UPDATE GiftCertificate g SET g.lastUpdateDate =:lastUpdateDate WHERE g.id=:certificateId";
+    private static final String FIND_ID_BY_TAG_ID="SELECT certificate_id FROM certificate_tags where certificate_tags.tag_id=:tagId";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -62,7 +59,6 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
         certificate.setCreateDate(ZonedDateTime.now(ZoneId.systemDefault()));
         certificate.setLastUpdateDate(ZonedDateTime.now(ZoneId.systemDefault()));
         entityManager.persist(certificate);
-        //todo save?
         return certificate;
     }
 
@@ -77,11 +73,10 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
         giftCertificate.setLastUpdateDate(ZonedDateTime.now(ZoneId.systemDefault()));
         return entityManager.merge(giftCertificate);
     }
-//todo ask
+
     @Override
     public Optional<Long> findIdByTagId(Long tagId) {
-        return entityManager.createNativeQuery(
-                        "SELECT certificate_id FROM certificate_tags where certificate_tags.tag_id=:tagId")
+        return entityManager.createNativeQuery(FIND_ID_BY_TAG_ID)
                 .setParameter("tagId", tagId)
                 .setMaxResults(1)
                 .getResultList()
