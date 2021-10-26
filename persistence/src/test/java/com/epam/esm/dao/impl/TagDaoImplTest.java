@@ -6,15 +6,12 @@ import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.util.Page;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -28,9 +25,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(classes = DatabaseConfig.class)
 @Transactional
 class TagDaoImplTest {
-    @Autowired
-    private TagDao tagDao;
+    private final TagDao tagDao;
 
+    @Autowired
+    public TagDaoImplTest(TagDao tagDao) {
+        this.tagDao = tagDao;
+    }
 
     public static Object[][] createTags() {
         return new Object[][]{
@@ -56,11 +56,10 @@ class TagDaoImplTest {
     }
 
 
-    @ParameterizedTest
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
-    @MethodSource("createTags")
-    void addCorrectDataShouldSetIdTest(Tag tag) {
-        long expected = 5;
+  @Test
+    void addCorrectDataShouldSetIdTest() {
+        Tag tag=new Tag("name");
+        long expected = 11;
         tagDao.create(tag);
         assertEquals(expected, tag.getId());
     }
@@ -78,7 +77,7 @@ class TagDaoImplTest {
 
     @Test
     void shouldReturnTagOptionalWhenFindByIdTest() {
-        Tag tag = new Tag( "work");
+        Tag tag = new Tag("work");
         tag.setId(3);
         Optional<Tag> actual = tagDao.findById(3L);
         assertEquals(Optional.of(tag), actual);
@@ -123,7 +122,7 @@ class TagDaoImplTest {
     @Test
     void shouldDoesNotThrowExceptionTest() {
         Tag tag = new Tag("work");
-        GiftCertificate certificate = new GiftCertificate( "a", "b", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>());
+        GiftCertificate certificate = new GiftCertificate("a", "b", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>());
         assertDoesNotThrow(() -> tagDao.attachTag(tag, certificate));
 
     }
