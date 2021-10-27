@@ -38,15 +38,6 @@ class GlobalExceptionHandler {
 
     }
 
-//    @ExceptionHandler(EmptyResultDataAccessException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ExceptionResponse handleEmptyResultDataAccessException(EmptyResultDataAccessException e, Locale locale) {
-//        String exceptionMessage = exceptionMessageCreator.createMessage(ExceptionMessageKey.INVALID_INPUT_WITH_PARAM,
-//                locale, e.getMessage());
-//        log.error(exceptionMessage);
-//        return new ExceptionResponse(ExceptionCode.RESOURCE_NOT_FOUND, exceptionMessage);
-//    }
-
     @ExceptionHandler(DublicateResourceException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionResponse handleDublicateResourceException(
@@ -70,7 +61,7 @@ class GlobalExceptionHandler {
 
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Set<ExceptionResponse> handleResourceNotFoundException(
             ResourceNotFoundException e, Locale locale) {
         Set<String> exceptionMessage = exceptionMessageCreator.createMessage(e.getErrorMessageKey(),
@@ -100,12 +91,20 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponse handleRuntimeException(HttpMessageNotReadableException exception, Locale locale) {
-        System.out.println(ExceptionMessageKey.INVALID_INPUT_WITH_PARAM+locale+exception.getHttpInputMessage());
+    public ExceptionResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException exception, Locale locale) {
         String exceptionMessage = exceptionMessageCreator.createMessage(ExceptionMessageKey.INVALID_INPUT, locale);
         log.error(exceptionMessage);
         return new ExceptionResponse(ExceptionCode.INCORRECT_PARAMETER_VALUE, exceptionMessage);
     }
+
+    @ExceptionHandler(NumberFormatException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionResponse handleMethodArgumentTypeMismatchException(NumberFormatException exception, Locale locale) {
+        String exceptionMessage = exceptionMessageCreator.createMessage(ExceptionMessageKey.RESOURCE_NOT_FOUND, locale);
+        log.error(exceptionMessage);
+        return new ExceptionResponse(ExceptionCode.NOT_FOUND, exceptionMessage);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionResponse handleRuntimeException(RuntimeException exception, Locale locale) {

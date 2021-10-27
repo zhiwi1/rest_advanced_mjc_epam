@@ -18,6 +18,6 @@ public class ResourceNotFoundException extends ServiceException {
 
     @Override
     public int getCode() {
-        return ExceptionCode.RESOURCE_NOT_FOUND;
+        return ExceptionCode.RESOURCE_NOT_FOUND_BAD_REQUEST;
     }
 }

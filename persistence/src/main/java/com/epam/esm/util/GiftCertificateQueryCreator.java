@@ -77,7 +77,8 @@ import java.util.stream.Collectors;
             if (giftCertificateQueryParameters.getOrderType() != null) {
                 String orderFieldName = giftCertificateQueryParameters.getOrderType().getName();
                 if (giftCertificateQueryParameters.getSortType() != null
-                        && giftCertificateQueryParameters.getSortType().equals(SortType.DESC)) {
+                        && giftCertificateQueryParameters.getSortType()==SortType.DESC) {
+                    //todo in if in boolean
                     criteriaQuery.orderBy(criteriaBuilder.desc(giftCertificateRoot.get(orderFieldName)));
                 } else {
                     criteriaQuery.orderBy(criteriaBuilder.asc(giftCertificateRoot.get(orderFieldName)));

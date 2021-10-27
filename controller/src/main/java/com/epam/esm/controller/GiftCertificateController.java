@@ -42,7 +42,7 @@ public class GiftCertificateController {
         return giftCertificateService.findGiftCertificates(giftCertificateQueryParametersDto, pageDto);
     }
 
-    @GetMapping("/{id:\\d+}")
+    @GetMapping("/{id}")
     public GiftCertificateDto findById(@Range(min = 0) @PathVariable Long id) {
         GiftCertificateDto giftCertificateDto = giftCertificateService.findById(id);
         linkMapper.mapLinks(giftCertificateDto);
@@ -55,13 +55,13 @@ public class GiftCertificateController {
         return giftCertificateService.create(giftCertificate);
     }
 
-    @PatchMapping("/{id:\\d+}")
+    @PatchMapping("/{id}")
     public GiftCertificateDto update(@PathVariable @Range(min = 0) Long id, @Valid @RequestBody GiftCertificateInputDto giftCertificate) {
         return giftCertificateService.update(id, giftCertificate);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id:\\d+}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable @Range(min = 0) Long id) {
         giftCertificateService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

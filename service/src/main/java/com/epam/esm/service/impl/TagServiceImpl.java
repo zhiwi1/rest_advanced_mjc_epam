@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TagServiceImpl implements TagService {
     private final TagDao tagDao;
-    private final UserDao userDao;
     private final GiftCertificateDao giftCertificateDao;
     private final ServiceTagMapper tagMapper;
     private final ServicePageMapper pageMapper;
@@ -80,21 +79,22 @@ public class TagServiceImpl implements TagService {
     @Override
     public void attachTag(CertificateTagDto certificateTagDto) {
         Optional<Tag> tag = tagDao.findById(certificateTagDto.getTagId());
+        if (tag.isEmpty()) {
+            throw new ResourceNotFoundException(certificateTagDto.getTagId());
+        }
         Optional<GiftCertificate> giftCertificate = giftCertificateDao.findById(certificateTagDto.getCertificateId());
-        if (tag.isEmpty() || giftCertificate.isEmpty()) {
-            throw new ResourceNotFoundException(certificateTagDto.getCertificateId(), certificateTagDto.getTagId());
+        if (giftCertificate.isEmpty()) {
+            throw new ResourceNotFoundException(certificateTagDto.getCertificateId());
         }
         tagDao.attachTag(tag.get(), giftCertificate.get());
         giftCertificateDao.updateLastDate(certificateTagDto.getCertificateId());
     }
 
-    @Transactional
     @Override
-    public Optional<Tag> findMostPopularTagWithHighestCostOfAllOrders() {
-        Optional<User> user = userDao.findByHighestCostOfAllOrders();
-        if (user.isEmpty()) {
-            throw new ResourceNotFoundException();
-        }
-        return tagDao.findMostPopularOfUser();
+    public TagDto findMostPopularTagWithHighestCostOfAllOrders() {
+
+        Optional<Tag> foundTagOptional = tagDao.findMostPopularOfUser();
+        return foundTagOptional.map(tagMapper::toDto)
+                .orElseThrow(ResourceNotFoundException::new);
     }
 }

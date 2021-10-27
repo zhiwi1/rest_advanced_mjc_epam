@@ -10,7 +10,11 @@ import java.util.Arrays;
 @Getter
 public enum OrderType {
     NAME("name"),
-    CREATE_DATE("createDate");
+    CREATE_DATE("createDate"),
+    ID("id"),
+    PRICE("price"),
+    LAST_UPDATE_DATE("lastUpdateDate"),
+    DURATION("duration");
 
     private final String name;
 

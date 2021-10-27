@@ -28,7 +28,7 @@ public class OrderController {
     private final OrderService orderService;
     private final LinkMapper linkMapper;
 
-    @GetMapping("/{id:\\d+}")
+    @GetMapping("/{id}")
     public OrderDto findById(@PathVariable @Range(min = 1) long id) {
         OrderDto orderDto = orderService.findById(id);
         linkMapper.mapLinks(orderDto);
@@ -36,7 +36,7 @@ public class OrderController {
 
     }
 
-    @GetMapping("/users/{userId:\\d+}")
+    @GetMapping("/users/{userId}")
     public List<OrderDto> findByUserId(@PathVariable @Range(min = 1) long userId,
                                        @RequestParam(required = false, defaultValue = "1") @Range(min = 0) int page,
                                        @RequestParam(required = false, defaultValue = "5") @Range(min = 0) int size) {

@@ -32,7 +32,7 @@ public class UserController {
         return userDtoList;
     }
 
-    @GetMapping("/{id:\\d+}")
+    @GetMapping("/{id}")
     public UserDto findById(@PathVariable @Range(min = 0) Long id) {
         UserDto userDto = userService.findById(id);
         linkMapper.mapLinks(userDto);

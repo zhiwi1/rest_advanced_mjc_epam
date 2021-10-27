@@ -26,10 +26,4 @@ public interface UserDao {
      */
     Optional<User> findById(Long id);
 
-    /**
-     * Find by highest cost of all orders optional.
-     *
-     * @return the optional of user
-     */
-    Optional<User> findByHighestCostOfAllOrders();
 }

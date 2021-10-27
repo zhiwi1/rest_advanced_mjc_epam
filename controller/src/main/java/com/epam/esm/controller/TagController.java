@@ -45,7 +45,7 @@ public class TagController {
         return tagDtoList;
     }
 
-    @GetMapping("/{id:\\d+}")
+    @GetMapping("/{id}")
     public TagDto findById(@PathVariable @Range(min = 0) Long id) {
 
         TagDto tagDto = tagService.findById(id);
@@ -61,7 +61,7 @@ public class TagController {
         return tagDto;
     }
 
-    @DeleteMapping("/{id:\\d+}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> delete(@PathVariable @Range(min = 0) Long id) {
         tagService.delete(id);
@@ -75,8 +75,10 @@ public class TagController {
     }
 
     @GetMapping("/popular")
-    public Optional<Tag> findMostPopularTagWithHighestCostOfAllOrders() {
-        return tagService.findMostPopularTagWithHighestCostOfAllOrders();
+    public TagDto findMostPopularTagWithHighestCostOfAllOrders() {
+        TagDto tagDto = tagService.findMostPopularTagWithHighestCostOfAllOrders();
+        linkMapper.mapLinks(tagDto);
+        return tagDto;
     }
 
 }

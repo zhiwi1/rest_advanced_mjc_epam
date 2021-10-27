@@ -33,6 +33,6 @@ public interface TagService extends BaseService<TagDto, Long> {
      *
      * @return the optional of tag
      */
-    Optional<Tag> findMostPopularTagWithHighestCostOfAllOrders();
+    TagDto findMostPopularTagWithHighestCostOfAllOrders();
 }
 
