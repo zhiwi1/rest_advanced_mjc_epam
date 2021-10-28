@@ -5,7 +5,7 @@ import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.GiftCertificateInputDto;
 import com.epam.esm.dto.GiftCertificateQueryParamDto;
 import com.epam.esm.dto.PageDto;
-import com.epam.esm.hateoas.LinkMapper;
+import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.GiftCertificateService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Range;
@@ -32,7 +32,7 @@ import java.util.List;
 @Validated
 public class GiftCertificateController {
     private final GiftCertificateService giftCertificateService;
-    private final LinkMapper linkMapper;
+    private final LinkMapperFacade linkMapper;
 
     @GetMapping
     public List<GiftCertificateDto> findGiftCertificates(@Valid @RequestBody GiftCertificateQueryParamDto giftCertificateQueryParametersDto,

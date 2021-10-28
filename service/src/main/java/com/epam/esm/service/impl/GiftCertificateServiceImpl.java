@@ -1,7 +1,10 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
-import com.epam.esm.dto.*;
+import com.epam.esm.dto.GiftCertificateDto;
+import com.epam.esm.dto.GiftCertificateInputDto;
+import com.epam.esm.dto.PageDto;
+import com.epam.esm.dto.GiftCertificateQueryParamDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.exception.DublicateResourceException;
 import com.epam.esm.exception.ResourceNotFoundException;
@@ -42,12 +45,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<GiftCertificateDto> findAll(PageDto pageDto) {
-        return null;
-//        List<GiftCertificate> foundGiftCertificates
-//                = giftCertificateDao.findAll(pageDto);
-//        return foundGiftCertificates.stream()
-//                .map(this::convertGiftCertificateAndSetTags)
-//                .collect(Collectors.toList());
+        throw new UnsupportedOperationException(
+                String.format("Can't execute findAll(%s)This operation not supported in this implementation",
+                        pageDto.toString()
+                )
+        );
     }
 
     @Override

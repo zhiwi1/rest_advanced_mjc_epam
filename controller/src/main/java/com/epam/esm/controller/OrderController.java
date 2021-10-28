@@ -2,7 +2,7 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.OrderDto;
 import com.epam.esm.dto.PageDto;
-import com.epam.esm.hateoas.LinkMapper;
+import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Range;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -26,10 +27,10 @@ import java.util.List;
 @Validated
 public class OrderController {
     private final OrderService orderService;
-    private final LinkMapper linkMapper;
+    private final LinkMapperFacade linkMapper;
 
     @GetMapping("/{id}")
-    public OrderDto findById(@PathVariable @Range(min = 1) long id) {
+    public OrderDto findById(@PathVariable @Min(0) long id) {
         OrderDto orderDto = orderService.findById(id);
         linkMapper.mapLinks(orderDto);
         return orderDto;

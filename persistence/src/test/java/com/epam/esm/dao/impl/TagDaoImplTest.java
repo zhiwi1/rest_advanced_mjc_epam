@@ -59,7 +59,7 @@ class TagDaoImplTest {
   @Test
     void addCorrectDataShouldSetIdTest() {
         Tag tag=new Tag("name");
-        long expected = 11;
+        long expected = 11L;
         tagDao.create(tag);
         assertEquals(expected, tag.getId());
     }
@@ -67,7 +67,7 @@ class TagDaoImplTest {
     @ParameterizedTest
     @MethodSource("createTagsTogether")
     void shouldReturnListOfTagsWhenFindAllTest(Tag tag1, Tag tag2, Tag tag3) {
-        long expected = 7;
+        long expected = 7L;
         tagDao.create(tag1);
         tagDao.create(tag2);
         tagDao.create(tag3);
@@ -78,14 +78,14 @@ class TagDaoImplTest {
     @Test
     void shouldReturnTagOptionalWhenFindByIdTest() {
         Tag tag = new Tag("work");
-        tag.setId(3);
+        tag.setId(3L);
         Optional<Tag> actual = tagDao.findById(3L);
         assertEquals(Optional.of(tag), actual);
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {100, 213, Long.MAX_VALUE, Long.MIN_VALUE})
-    void shouldReturnEmptyOptionalWhenFindByIdTest(long id) {
+    @ValueSource(longs = {100L, 213L, Long.MAX_VALUE, Long.MIN_VALUE})
+    void shouldReturnEmptyOptionalWhenFindByIdTest(Long id) {
         Optional<Tag> actual = tagDao.findById(id);
         assertFalse(actual.isPresent());
     }
@@ -97,8 +97,8 @@ class TagDaoImplTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {100, 213, Long.MAX_VALUE, Long.MIN_VALUE})
-    void shouldNotThrowExceptionWhenRemoveCorrectDataTest(long id) {
+    @ValueSource(longs = {100L, 213L, Long.MAX_VALUE, Long.MIN_VALUE})
+    void shouldNotThrowExceptionWhenRemoveCorrectDataTest(Long id) {
         assertThrows(InvalidDataAccessApiUsageException.class, () -> tagDao.delete(id));
     }
 

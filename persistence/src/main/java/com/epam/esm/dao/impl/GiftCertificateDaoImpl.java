@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -89,7 +88,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     @Override
     public List<GiftCertificate> findByQueryParameters(
             GiftCertificateQueryParam giftCertificateQueryParameters, Page page) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        var criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<GiftCertificate> criteriaQuery
                 = GiftCertificateQueryCreator.createQuery(giftCertificateQueryParameters, criteriaBuilder);
         return entityManager.createQuery(criteriaQuery)

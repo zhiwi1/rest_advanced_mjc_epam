@@ -22,7 +22,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 @RequiredArgsConstructor
-public class LinkMapper {
+public class LinkMapperFacade {
     private final ServiceGiftCertificateMapper certificateMapper;
 
     public void mapLinks(TagDto tagDto) {

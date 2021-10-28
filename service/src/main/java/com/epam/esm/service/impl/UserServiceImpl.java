@@ -25,7 +25,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long id) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(
+                String.format("Can't execute delete(%d).This operation not supported in this implementation", id
+                )
+        );
     }
 
     @Override

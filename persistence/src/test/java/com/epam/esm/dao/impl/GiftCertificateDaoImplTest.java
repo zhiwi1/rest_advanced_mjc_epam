@@ -70,7 +70,7 @@ class GiftCertificateDaoImplTest {
     @ParameterizedTest
     @MethodSource("createGiftCertificatesTogether")
     void shouldReturnListOfTagsWhenFindAllTest(GiftCertificate giftCertificate1, GiftCertificate giftCertificate2, GiftCertificate giftCertificate3) {
-        long expected = 7;
+        long expected = 7L;
         giftCertificateDao.create(giftCertificate1);
         giftCertificateDao.create(giftCertificate2);
         giftCertificateDao.create(giftCertificate3);
@@ -87,16 +87,15 @@ class GiftCertificateDaoImplTest {
 
 
     @ParameterizedTest
-    @ValueSource(longs = {100, 213, Long.MAX_VALUE, Long.MIN_VALUE})
-    void deleteIncorrectDataShouldThrowExceptionTest(long id) {
+    @ValueSource(longs = {100L, 213L, Long.MAX_VALUE, Long.MIN_VALUE})
+    void deleteIncorrectDataShouldThrowExceptionTest(Long id) {
         assertThrows(InvalidDataAccessApiUsageException.class,() -> giftCertificateDao.delete(id));
     }
 
 
     @ParameterizedTest
-    @ValueSource(longs = {1, 2, 3, 4, 5, 100, 213, Long.MAX_VALUE, Long.MIN_VALUE})
-    void shouldNotThrowExceptionDeleteCertificateCorrectDataTest() {
-        long id = 1;
+    @ValueSource(longs = {1L, 2L, 3L, 4L})
+    void shouldNotThrowExceptionDeleteCertificateCorrectDataTest(long id) {
         assertDoesNotThrow(() -> giftCertificateDao.delete(id));
     }
 
@@ -115,7 +114,7 @@ class GiftCertificateDaoImplTest {
     @Test
     void shouldReturnUpdatedCertificateTest() {
         GiftCertificate expected = new GiftCertificate( "a", "b", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>());
-        expected.setId(14);
+        expected.setId(14L);
         GiftCertificate actual = giftCertificateDao.update(expected);
         assertEquals(expected, actual);
     }

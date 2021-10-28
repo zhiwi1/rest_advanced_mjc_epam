@@ -4,8 +4,7 @@ import com.epam.esm.dto.CertificateTagDto;
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagCreateDto;
 import com.epam.esm.dto.TagDto;
-import com.epam.esm.entity.Tag;
-import com.epam.esm.hateoas.LinkMapper;
+import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Range;
@@ -24,8 +23,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -34,9 +33,10 @@ import java.util.Optional;
 @Validated
 public class TagController {
     private final TagService tagService;
-    private final LinkMapper linkMapper;
+    private final LinkMapperFacade linkMapper;
 
     @GetMapping
+    //todo validation pagination
     public List<TagDto> findAll(@RequestParam(required = false, defaultValue = "1") int page,
                                 @RequestParam(required = false, defaultValue = "5") int size) {
         PageDto pageDto = new PageDto(page, size);
@@ -46,8 +46,7 @@ public class TagController {
     }
 
     @GetMapping("/{id}")
-    public TagDto findById(@PathVariable @Range(min = 0) Long id) {
-
+    public TagDto findById(@PathVariable @Min(0) Long id) {
         TagDto tagDto = tagService.findById(id);
         linkMapper.mapLinks(tagDto);
         return tagDto;
@@ -63,7 +62,7 @@ public class TagController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> delete(@PathVariable @Range(min = 0) Long id) {
+    public ResponseEntity<Void> delete(@PathVariable @Min(0) Long id) {
         tagService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

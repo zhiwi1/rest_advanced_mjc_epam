@@ -3,7 +3,7 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.TagCreateDto;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.exception.ResourceNotFoundException;
-import com.epam.esm.hateoas.LinkMapper;
+import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.TagService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ class TagControllerTest {
     @MockBean
     private TagService tagService;
     @MockBean
-    private LinkMapper linkMapper;
+    private LinkMapperFacade linkMapper;
 
     public static Object[][] createTagsAndDto() {
         return new Object[][]{

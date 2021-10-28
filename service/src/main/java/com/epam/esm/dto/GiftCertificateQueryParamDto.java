@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GiftCertificateQueryParamDto {
-
+//todo validate tagNames
     private String[] tagNames;
     @Size(max=100)
     private String name;

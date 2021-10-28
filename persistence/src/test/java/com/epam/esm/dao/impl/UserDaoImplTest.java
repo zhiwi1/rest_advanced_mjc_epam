@@ -75,15 +75,11 @@ class UserDaoImplTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {100, Long.MAX_VALUE, 2123213321})
+    @ValueSource(longs = {100L, Long.MAX_VALUE, 2123213321L})
     void findByIdCorrectDataShouldReturnEmptyOptionalTest(long id) {
         Optional<User> actual = userDao.findById(id);
         assertFalse(actual.isPresent());
     }
 
-    @Test
-    void findByHighestCostOfAllOrdersShouldReturnUserOptionalTest() {
-        Optional<User> actual = userDao.findByHighestCostOfAllOrders();
-        assertEquals(Optional.of(new User(1L,"Oleg")), actual);
-    }
+
 }
