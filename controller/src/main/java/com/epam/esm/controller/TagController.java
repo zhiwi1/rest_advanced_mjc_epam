@@ -7,7 +7,6 @@ import com.epam.esm.dto.TagDto;
 import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.TagService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,16 +26,26 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 
+/**
+ * The type Tag controller.
+ */
 @RestController
 @RequestMapping("/v2/tags")
 @RequiredArgsConstructor
 @Validated
 public class TagController {
+    private static final int MIN_ID_VALUE =1;
     private final TagService tagService;
     private final LinkMapperFacade linkMapper;
 
+    /**
+     * Find all with pagination list.
+     *
+     * @param page the page
+     * @param size the size
+     * @return the list
+     */
     @GetMapping
-    //todo validation pagination
     public List<TagDto> findAll(@RequestParam(required = false, defaultValue = "1") int page,
                                 @RequestParam(required = false, defaultValue = "5") int size) {
         PageDto pageDto = new PageDto(page, size);
@@ -45,13 +54,25 @@ public class TagController {
         return tagDtoList;
     }
 
+    /**
+     * Find by id tag dto.
+     *
+     * @param id the id
+     * @return the tag dto
+     */
     @GetMapping("/{id}")
-    public TagDto findById(@PathVariable @Min(0) Long id) {
+    public TagDto findById(@PathVariable @Min(MIN_ID_VALUE) Long id) {
         TagDto tagDto = tagService.findById(id);
         linkMapper.mapLinks(tagDto);
         return tagDto;
     }
 
+    /**
+     * Create tag dto.
+     *
+     * @param tagCreateDto the tag create dto
+     * @return the created tag dto
+     */
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public TagDto create(@Valid @RequestBody TagCreateDto tagCreateDto) {
@@ -60,19 +81,35 @@ public class TagController {
         return tagDto;
     }
 
+    /**
+     * Delete response entity.
+     *
+     * @param id the id
+     * @return the response entity
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> delete(@PathVariable @Min(0) Long id) {
+    public ResponseEntity<Void> delete(@PathVariable @Min(MIN_ID_VALUE) Long id) {
         tagService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Attach tag to gift certificate.
+     *
+     * @param certificateTagDto the certificate tag dto
+     */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/attach")
     public void attachTag(@Valid @RequestBody CertificateTagDto certificateTagDto) {
         tagService.attachTag(certificateTagDto);
     }
 
+    /**
+     * Find most popular tag with highest cost of all orders tag dto.
+     *
+     * @return the tag dto
+     */
     @GetMapping("/popular")
     public TagDto findMostPopularTagWithHighestCostOfAllOrders() {
         TagDto tagDto = tagService.findMostPopularTagWithHighestCostOfAllOrders();

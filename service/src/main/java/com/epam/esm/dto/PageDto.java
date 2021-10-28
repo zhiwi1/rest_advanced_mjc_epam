@@ -4,15 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Range;
+
+import javax.validation.constraints.Min;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PageDto {
-    @Range(min = 1)
+    @Min(1)
     private int number;
-    @Range(min = 0)
+    @Min(1)
     private int size;
 }

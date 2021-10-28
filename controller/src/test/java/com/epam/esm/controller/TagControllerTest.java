@@ -28,12 +28,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(TagController.class)
 class TagControllerTest {
+    private static final String TAG_CONTROLLER_URL = "/v2/tags/";
     @Autowired
     private MockMvc mockMvc;
     @MockBean
     private TagService tagService;
     @MockBean
     private LinkMapperFacade linkMapper;
+
 
     public static Object[][] createTagsAndDto() {
         return new Object[][]{
@@ -46,13 +48,13 @@ class TagControllerTest {
     @MethodSource("createTagsAndDto")
     void shouldReturnStatusOkWhenFindById(TagDto tagDto) throws Exception {
         Mockito.when(tagService.findById(tagDto.getId())).thenReturn(tagDto);
-        String url = "/v2/tags/" + tagDto.getId();
+        String url = TAG_CONTROLLER_URL + tagDto.getId();
         mockMvc.perform(get(url)).andExpect(status().isOk());
     }
 
     @Test
     void shouldReturnStatus4xxWhenFindById() throws Exception {
-        String url = "/v2/tags/m";
+        String url = TAG_CONTROLLER_URL + "m";
         mockMvc.perform(get(url)).andExpect(status().is4xxClientError());
     }
 
@@ -61,14 +63,14 @@ class TagControllerTest {
     @ValueSource(longs = {1, 2, 3})
     void shouldThrowExceptionWhenFindById(Long id) {
         doThrow(new ResourceNotFoundException()).when(tagService).findById(any(Long.class));
-        String url = "/v2/tags/{id}";
+        String url = TAG_CONTROLLER_URL + "{id}";
         assertThrows(NestedServletException.class, () -> mockMvc.perform(get(url, id)));
     }
 
     @Test
     void shouldReturnNoContentStatusWhenDelete() throws Exception {
         doNothing().when(tagService).delete(any(Long.class));
-        mockMvc.perform(delete("/v2/tags/{id}", 1))
+        mockMvc.perform(delete(TAG_CONTROLLER_URL + "{id}", 1))
                 .andExpect(status().isNoContent());
     }
 
@@ -78,7 +80,7 @@ class TagControllerTest {
         Mockito.when(tagService.create(new TagCreateDto("name"))).thenReturn(new TagDto(1, "name"));
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(tagCreateDto);
-        mockMvc.perform(post("/v2/tags/").contentType(MediaType.APPLICATION_JSON).content(json).characterEncoding("utf-8"))
+        mockMvc.perform(post(TAG_CONTROLLER_URL).contentType(MediaType.APPLICATION_JSON).content(json).characterEncoding("utf-8"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
                 .andExpect(status().isCreated());
     }

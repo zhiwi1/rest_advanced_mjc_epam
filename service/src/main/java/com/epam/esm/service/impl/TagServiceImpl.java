@@ -2,14 +2,12 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.TagDao;
-import com.epam.esm.dao.UserDao;
 import com.epam.esm.dto.CertificateTagDto;
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagCreateDto;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.entity.User;
 import com.epam.esm.exception.DublicateResourceException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.ServicePageMapper;
@@ -37,10 +35,7 @@ public class TagServiceImpl implements TagService {
     @Transactional
     @Override
     public TagDto create(TagCreateDto tagCreateDto) {
-        Optional<Tag> existingTagOptional = tagDao.findByName(tagCreateDto.getName());
-        if (existingTagOptional.isPresent()) {
-            throw new DublicateResourceException(tagCreateDto.getName());
-        }
+        isTagDublicate(tagCreateDto);
         Tag tag = tagMapper.toEntity(tagCreateDto);
         Tag insertedTag = tagDao.create(tag);
         return tagMapper.toDto(insertedTag);
@@ -65,10 +60,7 @@ public class TagServiceImpl implements TagService {
     @Transactional
     @Override
     public void delete(Long id) {
-        Optional<Tag> tag = tagDao.findById(id);
-        if (tag.isEmpty()) {
-            throw new ResourceNotFoundException(id);
-        }
+        isTagExists(id);
         Optional<Long> idOfGiftCertificate = giftCertificateDao.findIdByTagId(id);
         idOfGiftCertificate.ifPresent(giftCertificateDao::updateLastDate);
         tagDao.delete(id);
@@ -96,5 +88,19 @@ public class TagServiceImpl implements TagService {
         Optional<Tag> foundTagOptional = tagDao.findMostPopularOfUser();
         return foundTagOptional.map(tagMapper::toDto)
                 .orElseThrow(ResourceNotFoundException::new);
+    }
+
+    private void isTagDublicate(TagCreateDto tagCreateDto) {
+        Optional<Tag> existingTagOptional = tagDao.findByName(tagCreateDto.getName());
+        if (existingTagOptional.isPresent()) {
+            throw new DublicateResourceException(tagCreateDto.getName());
+        }
+    }
+
+    private void isTagExists(long id) {
+        Optional<Tag> tag = tagDao.findById(id);
+        if (tag.isEmpty()) {
+            throw new ResourceNotFoundException(id);
+        }
     }
 }

@@ -4,6 +4,7 @@ import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.SortType;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -14,6 +15,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Gift certificate query creator.
+ */
 @UtilityClass
 public class GiftCertificateQueryCreator {
 
@@ -22,6 +26,13 @@ public class GiftCertificateQueryCreator {
     private static final String PERCENT = "%";
     private static final String DESCRIPTION = "description";
 
+    /**
+     * Create query criteria query for search by tagNames,description, name,and sort (asc,desc) in order of(name,createDate...)
+     *
+     * @param certificateQueryParamDto the certificate query param dto
+     * @param criteriaBuilder          the criteria builder
+     * @return the criteria query
+     */
     public CriteriaQuery<GiftCertificate> createQuery(GiftCertificateQueryParam certificateQueryParamDto,
                                                       CriteriaBuilder criteriaBuilder) {
         var criteriaQuery = criteriaBuilder.createQuery(GiftCertificate.class);
@@ -51,24 +62,14 @@ public class GiftCertificateQueryCreator {
     private List<Predicate> addName(GiftCertificateQueryParam giftCertificateQueryParameters,
                                     CriteriaBuilder criteriaBuilder,
                                     Root<GiftCertificate> giftCertificateRoot) {
-        List<Predicate> predicates = new ArrayList<>();
-
-        if (giftCertificateQueryParameters.getName() != null) {
-            predicates.add(criteriaBuilder.like(giftCertificateRoot.get(NAME),
-                    PERCENT + giftCertificateQueryParameters.getName() + PERCENT));
-        }
-        return predicates;
+        return createPredicates(giftCertificateQueryParameters.getName(), criteriaBuilder, giftCertificateRoot, NAME);
     }
 
     private List<Predicate> addDescription(GiftCertificateQueryParam giftCertificateQueryParameters,
                                            CriteriaBuilder criteriaBuilder,
                                            Root<GiftCertificate> giftCertificateRoot) {
-        List<Predicate> predicates = new ArrayList<>();
-        if (giftCertificateQueryParameters.getDescription() != null) {
-            predicates.add(criteriaBuilder.like(giftCertificateRoot.get(DESCRIPTION),
-                    PERCENT + giftCertificateQueryParameters.getDescription() + PERCENT));
-        }
-        return predicates;
+
+        return createPredicates(giftCertificateQueryParameters.getDescription(), criteriaBuilder, giftCertificateRoot, DESCRIPTION);
     }
 
     private void addOrderAndSortType(GiftCertificateQueryParam queryParam,
@@ -91,6 +92,17 @@ public class GiftCertificateQueryCreator {
                 && queryParam.getSortType() == SortType.DESC;
     }
 
+    private List<Predicate> createPredicates(String fieldValue,
+                                             CriteriaBuilder criteriaBuilder,
+                                             Root<GiftCertificate> giftCertificateRoot,
+                                             String rootField) {
+        List<Predicate> predicates = new ArrayList<>();
+        if (StringUtils.isNotEmpty(fieldValue)) {
+            predicates.add(criteriaBuilder.like(giftCertificateRoot.get(rootField),
+                    PERCENT + fieldValue + PERCENT));
+        }
+        return predicates;
+    }
 }
 
 

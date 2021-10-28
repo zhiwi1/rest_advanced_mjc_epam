@@ -30,12 +30,7 @@ class GlobalExceptionHandler {
     Set<ExceptionResponse> handleConstraintValidationException(
             ConstraintViolationException e, Locale locale) {
         Set<ConstraintViolation<?>> set = e.getConstraintViolations();
-        return set.stream().map(violation -> violation.getInvalidValue() + SPACE_DELIMITER + exceptionMessageCreator.
-                        createMessage(violation.getMessage(), locale))
-                .map(message -> new ExceptionResponse(
-                        ExceptionCode.INCORRECT_PARAMETER_VALUE, message))
-                .collect(Collectors.toSet());
-
+        return createExceptionResponse(set, locale);
     }
 
     @ExceptionHandler(DublicateResourceException.class)
@@ -113,4 +108,11 @@ class GlobalExceptionHandler {
         return new ExceptionResponse(ExceptionCode.INCORRECT_PARAMETER_VALUE, exceptionMessage);
     }
 
+    private Set<ExceptionResponse> createExceptionResponse(Set<ConstraintViolation<?>> set, Locale locale) {
+        return set.stream().map(violation -> violation.getInvalidValue() + SPACE_DELIMITER + exceptionMessageCreator.
+                        createMessage(violation.getMessage(), locale))
+                .map(message -> new ExceptionResponse(
+                        ExceptionCode.INCORRECT_PARAMETER_VALUE, message))
+                .collect(Collectors.toSet());
+    }
 }

@@ -1,11 +1,9 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
-import com.epam.esm.dto.GiftCertificateDto;
-import com.epam.esm.dto.GiftCertificateInputDto;
-import com.epam.esm.dto.PageDto;
-import com.epam.esm.dto.GiftCertificateQueryParamDto;
+import com.epam.esm.dto.*;
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.DublicateResourceException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.ServiceGiftCertificateMapper;
@@ -34,10 +32,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Transactional
     @Override
     public GiftCertificateDto create(GiftCertificateInputDto giftCertificateInputDto) {
-        Optional<GiftCertificate> existingCertificate = giftCertificateDao.findByName(giftCertificateInputDto.getName());
-        if (existingCertificate.isPresent()) {
-            throw new DublicateResourceException(giftCertificateInputDto.getName());
-        }
+        isCertificateDublicate(giftCertificateInputDto);
         GiftCertificate certificate = certificateMapper.toEntity(giftCertificateInputDto);
         GiftCertificate addedCertificate = giftCertificateDao.create(certificate);
         return certificateMapper.toDto(addedCertificate);
@@ -86,10 +81,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Transactional
     @Override
     public void delete(Long id) {
-        Optional<GiftCertificate> certificate = giftCertificateDao.findById(id);
-        if (certificate.isEmpty()) {
-            throw new ResourceNotFoundException(id);
-        }
+        isCertificateExists(id);
         giftCertificateDao.delete(id);
     }
 
@@ -99,6 +91,20 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         Optional.ofNullable(receivedGiftCertificate.getDescription()).ifPresent(foundCertificate::setDescription);
         Optional.ofNullable(receivedGiftCertificate.getPrice()).ifPresent(foundCertificate::setPrice);
         Optional.of(receivedGiftCertificate.getDuration()).filter(duration -> duration != 0).ifPresent(foundCertificate::setDuration);
+    }
+
+    private void isCertificateDublicate(GiftCertificateInputDto certificateInputDto) {
+        Optional<GiftCertificate> existingCertificateOptional = giftCertificateDao.findByName(certificateInputDto.getName());
+        if (existingCertificateOptional.isPresent()) {
+            throw new DublicateResourceException(certificateInputDto.getName());
+        }
+    }
+
+    private void isCertificateExists(long id) {
+        Optional<GiftCertificate> certificate = giftCertificateDao.findById(id);
+        if (certificate.isEmpty()) {
+            throw new ResourceNotFoundException(id);
+        }
     }
 }
 
