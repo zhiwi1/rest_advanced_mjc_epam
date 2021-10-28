@@ -28,9 +28,10 @@ import java.util.List;
 public class OrderController {
     private final OrderService orderService;
     private final LinkMapperFacade linkMapper;
+    private static final int MIN_VALUE_FOR_ID =1;
 
     @GetMapping("/{id}")
-    public OrderDto findById(@PathVariable @Min(0) long id) {
+    public OrderDto findById(@PathVariable @Min(MIN_VALUE_FOR_ID) long id) {
         OrderDto orderDto = orderService.findById(id);
         linkMapper.mapLinks(orderDto);
         return orderDto;
@@ -38,7 +39,7 @@ public class OrderController {
     }
 
     @GetMapping("/users/{userId}")
-    public List<OrderDto> findByUserId(@PathVariable @Range(min = 1) long userId,
+    public List<OrderDto> findByUserId(@PathVariable @Min(MIN_VALUE_FOR_ID) long userId,
                                        @RequestParam(required = false, defaultValue = "1") @Range(min = 0) int page,
                                        @RequestParam(required = false, defaultValue = "5") @Range(min = 0) int size) {
         PageDto pageDto = new PageDto(page, size);
