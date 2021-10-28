@@ -50,9 +50,9 @@ class UserServiceImplTest {
 
     public static Object[][] createUsers() {
         return new Object[][]{
-                {new User(1L, "ab"), new User(2L, "ab")},
-                {new User(1L, "Ivan"), new User(2L, "Oleg")},
-                {new User(1L, "aaaa"), new User(2L, "bbbb")}
+                {new User( "ab"), new User( "ab")},
+                {new User( "Ivan"), new User( "Oleg")},
+                {new User( "aaaa"), new User( "bbbb")}
         };
     }
 
@@ -75,7 +75,8 @@ class UserServiceImplTest {
     @ParameterizedTest
     @ValueSource(longs = {1, 10, 111123123})
     void findUserByIdCorrectDataShouldReturnUserDtoTest(long id) {
-        User user = new User(1L, "Ivan");
+        User user = new User( "Ivan");
+        user.setId(1);
         UserDto expected = new UserDto(1L, "Ivan");
         when(userDao.findById(any(long.class))).thenReturn(Optional.of(user));
         UserDto actual = userService.findById(id);
@@ -92,7 +93,8 @@ class UserServiceImplTest {
     @ParameterizedTest
     @ValueSource(longs = {-1, -10, -111123123})
     void findUserByIdIncorrectDataShouldThrowExceptionTest(long id) {
-        User user = new User(1L, "Ivan");
+        User user = new User( "Ivan");
+        user.setId(1);
         when(userDao.findById(any(long.class))).thenReturn(Optional.of(user));
         assertDoesNotThrow(() -> userService.findById(id));
     }

@@ -1,6 +1,6 @@
 package com.epam.esm.dao.impl;
 
-import com.epam.esm.config.DatabaseConfig;
+import com.epam.esm.config.TestDatabaseConfig;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
@@ -11,9 +11,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -22,13 +21,14 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(classes = DatabaseConfig.class)
+@SpringBootTest(classes = {TestDatabaseConfig.class})
 @Transactional
 class TagDaoImplTest {
+
     private final TagDao tagDao;
 
     @Autowired
-    public TagDaoImplTest(TagDao tagDao) {
+    TagDaoImplTest(TagDao tagDao) {
         this.tagDao = tagDao;
     }
 
@@ -56,9 +56,9 @@ class TagDaoImplTest {
     }
 
 
-  @Test
+    @Test
     void addCorrectDataShouldSetIdTest() {
-        Tag tag=new Tag("name");
+        Tag tag = new Tag("name");
         long expected = 11L;
         tagDao.create(tag);
         assertEquals(expected, tag.getId());
@@ -99,7 +99,7 @@ class TagDaoImplTest {
     @ParameterizedTest
     @ValueSource(longs = {100L, 213L, Long.MAX_VALUE, Long.MIN_VALUE})
     void shouldNotThrowExceptionWhenRemoveCorrectDataTest(Long id) {
-        assertThrows(InvalidDataAccessApiUsageException.class, () -> tagDao.delete(id));
+        assertThrows(IllegalArgumentException.class, () -> tagDao.delete(id));
     }
 
 

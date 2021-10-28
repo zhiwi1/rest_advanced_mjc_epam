@@ -6,7 +6,9 @@ import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.OrderDto;
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.UserDto;
+import com.epam.esm.dto.OrderInputDto;
 import com.epam.esm.entity.Order;
+import com.epam.esm.entity.User;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.OrderService;
@@ -46,9 +48,9 @@ class OrderServiceImplTest {
     private static Order order1;
     private static Order order2;
     private static OrderDto orderDto1;
-    private static OrderDto orderDto2;
+    private static OrderInputDto orderDto2;
     private static OrderDto orderDto3;
-    private static OrderDto orderDto4;
+    private static OrderInputDto orderDto4;
     private static GiftCertificateDto giftCertificateDto1;
     private static UserDto userDto1;
     private static PageDto pageDto1;
@@ -58,27 +60,27 @@ class OrderServiceImplTest {
     static void setUp() {
         ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneId.systemDefault());
         order1 = Order.builder()
-                .id(1L)
                 .createDate(zonedDateTime)
                 .price(new BigDecimal("100"))
-                .userId(1L)
+                .user(new User("Ivan"))
                 .certificateId(2L)
                 .build();
+        order1.setId(1);
         order2 = Order.builder()
-                .id(1L)
                 .createDate(zonedDateTime)
                 .price(new BigDecimal("1000"))
-                .userId(1L)
+                .user(new User("Ivan"))
                 .certificateId(2L)
                 .build();
+        order2.setId(1);
         orderDto1 = OrderDto.builder()
                 .id(1L)
                 .createDate(zonedDateTime)
                 .price(new BigDecimal("100"))
-                .userId(1L)
+                .user(new User("Ivan"))
                 .certificateId(2L)
                 .build();
-        orderDto2 = OrderDto.builder()
+        orderDto2 = OrderInputDto.builder()
                 .userId(1L)
                 .certificateId(2L)
                 .build();
@@ -86,11 +88,10 @@ class OrderServiceImplTest {
                 .id(1L)
                 .createDate(zonedDateTime)
                 .price(new BigDecimal("1000"))
-                .userId(1L)
+                .user(new User("Ivan"))
                 .certificateId(2L)
                 .build();
-        orderDto4 = OrderDto.builder()
-                .id(-1L)
+        orderDto4 = OrderInputDto.builder()
                 .userId(1L)
                 .certificateId(2L)
                 .build();
@@ -174,7 +175,7 @@ class OrderServiceImplTest {
     void findOrdersByUserIdCorrectDataShouldReturnListOfOrderDtoTest() {
         int expected = 2;
         long userId = 1;
-        when(orderDao.findByUserId(any(long.class), any(Page.class))).thenReturn(Arrays.asList(order1, order2));
+        when(orderDao.findByUser(any(User.class), any(Page.class))).thenReturn(Arrays.asList(order1, order2));
         List<OrderDto> actual = orderService.findByUserId(userId, pageDto1);
         assertEquals(expected, actual.size());
     }
@@ -182,7 +183,7 @@ class OrderServiceImplTest {
     @Test
     void findOrdersByUserIdIncorrectDataShouldThrowExceptionTest() {
         long userId = 1;
-        when(orderDao.findByUserId(any(long.class), any(Page.class))).thenReturn(Arrays.asList(order1, order2));
+        when(orderDao.findByUser(any(User.class), any(Page.class))).thenReturn(Arrays.asList(order1, order2));
         assertDoesNotThrow( () -> orderService.findByUserId(userId, pageDto2));
     }
 }

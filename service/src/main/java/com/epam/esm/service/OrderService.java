@@ -1,6 +1,7 @@
 package com.epam.esm.service;
 
 import com.epam.esm.dto.OrderDto;
+import com.epam.esm.dto.OrderInputDto;
 import com.epam.esm.dto.PageDto;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface OrderService {
      * @param orderDto the order dto
      * @return created order dto
      */
-    OrderDto create(OrderDto orderDto);
+    OrderDto create(OrderInputDto orderDto);
 
     /**
      * Find by id order dto.

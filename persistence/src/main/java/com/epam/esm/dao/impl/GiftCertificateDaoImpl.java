@@ -69,7 +69,6 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public GiftCertificate update(GiftCertificate giftCertificate) {
-        giftCertificate.setLastUpdateDate(ZonedDateTime.now(ZoneId.systemDefault()));
         return entityManager.merge(giftCertificate);
     }
 

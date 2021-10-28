@@ -4,11 +4,11 @@ import com.epam.esm.dao.UserDao;
 import com.epam.esm.entity.User;
 
 import com.epam.esm.util.Page;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 

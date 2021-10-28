@@ -5,10 +5,11 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
-import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.sql.DataSource;
 
 @SpringBootConfiguration
 @ComponentScan("com.epam.esm")
@@ -25,17 +26,6 @@ public class ServiceConfiguration {
         return mapper;
     }
 
-//    @Bean
-//    public LocalEntityManagerFactoryBean managerFactoryBean() {
-//        final var result = new LocalEntityManagerFactoryBean();
-//        result.setPersistenceUnitName("com.epam.esm");
-//        return result;
-//    }
-//
-//    @Bean
-//    public PlatformTransactionManager transactionManager() {
-//        final var result = new JpaTransactionManager();
-//        result.setEntityManagerFactory(managerFactoryBean().getObject());
-//        return result;
-//    }
+
+
 }

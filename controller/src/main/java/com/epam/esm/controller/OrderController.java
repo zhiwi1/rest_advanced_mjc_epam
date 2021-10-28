@@ -1,6 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.dto.OrderDto;
+import com.epam.esm.dto.OrderInputDto;
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.OrderService;
@@ -69,13 +70,13 @@ public class OrderController {
     /**
      * Create order dto.
      *
-     * @param orderDto the order dto
+     * @param orderInputDto the order dto
      * @return the created order dto
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderDto create(@RequestBody @Valid OrderDto orderDto) {
-        OrderDto createdOrderDto = orderService.create(orderDto);
+    public OrderDto create(@RequestBody @Valid OrderInputDto orderInputDto) {
+        OrderDto createdOrderDto = orderService.create(orderInputDto);
         linkMapper.mapLinks(createdOrderDto);
         return createdOrderDto;
     }

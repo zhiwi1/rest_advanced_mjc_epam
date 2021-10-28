@@ -1,14 +1,14 @@
 package com.epam.esm.dao.impl;
 
-import com.epam.esm.config.DatabaseConfig;
+import com.epam.esm.config.TestDatabaseConfig;
 import com.epam.esm.dao.OrderDao;
 import com.epam.esm.entity.Order;
+import com.epam.esm.entity.User;
 import com.epam.esm.util.Page;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -20,7 +20,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(classes = DatabaseConfig.class)
+@SpringBootTest(classes = TestDatabaseConfig.class)
 @Transactional
 class OrderDaoImplTest {
     private final OrderDao orderDao;
@@ -33,40 +33,31 @@ class OrderDaoImplTest {
 
 
     @Test
-    void addCorrectDataShouldReturnOrderTest() {
+    void addCorrectDataShouldThrowExceptionReturnOrderTest() {
         Order order = Order.builder()
                 .createDate(ZonedDateTime.now())
                 .price(new BigDecimal("100"))
-                .userId(1L)
                 .certificateId(2L)
                 .build();
-        Order actual = orderDao.create(order);
-        assertNotNull(actual);
+        assertThrows(DataIntegrityViolationException.class, () -> orderDao.create(order));
     }
 
     @Test
-    void addCorrectDataShouldSetIdTest() {
-        long expected = 5;
+    void addIncorrectDataShouldThrowExcepTest() {
         Order order = Order.builder()
-                .createDate(ZonedDateTime.now())
                 .price(new BigDecimal("100"))
-                .userId(1L)
                 .certificateId(2L)
                 .build();
-        orderDao.create(order);
-        assertEquals(expected, order.getId());
+
+        assertThrows(DataIntegrityViolationException.class, () -> orderDao.create(order));
     }
 
     @Test
-    void addCorrectDataShouldThrowExceptionTest() {
+    void addIncorrect2DataShouldThrowExceptionTest() {
         Order order = Order.builder()
-                .id(1L)
-                .createDate(ZonedDateTime.now())
-                .price(new BigDecimal("100"))
-                .userId(1L)
                 .certificateId(2L)
                 .build();
-        assertThrows(InvalidDataAccessApiUsageException.class, () -> orderDao.create(order));
+        assertThrows(DataIntegrityViolationException.class, () -> orderDao.create(order));
     }
 
     @Test
@@ -74,7 +65,6 @@ class OrderDaoImplTest {
         Order order = Order.builder()
                 .createDate(ZonedDateTime.now())
                 .price(new BigDecimal("100000000000"))
-                .userId(1L)
                 .certificateId(2L)
                 .build();
         assertThrows(DataIntegrityViolationException.class, () -> orderDao.create(order));
@@ -84,12 +74,12 @@ class OrderDaoImplTest {
     @Test
     void findByIdCorrectDataShouldReturnOrderOptionalTest() {
         Order order = Order.builder()
-                .id(1L)
                 .createDate(ZonedDateTime.of(LocalDateTime.of(2019, 1, 1, 21, 0, 0), ZoneId.systemDefault()))
                 .price(new BigDecimal("1000"))
-                .userId(1L)
+                .user(new User("Oleg"))
                 .certificateId(2L)
                 .build();
+        order.setId(1);
         long id = 1;
         Optional<Order> actual = orderDao.findById(id);
         assertEquals(Optional.of(order), actual);
@@ -110,29 +100,31 @@ class OrderDaoImplTest {
                 .number(1)
                 .size(5)
                 .build();
-
-        List<Order> actual = orderDao.findByUserId(userId, page);
+        User user = new User("Oleg");
+        user.setId(userId);
+        List<Order> actual = orderDao.findByUser(user, page);
         assertEquals(expected, actual.size());
     }
 
     @Test
-    void findByUserIdCorrectDataShouldReturnEmptyListTest() {
-        long userId = 1;
+    void findByUserIdCorrectDataShouldThrowExceptionTest() {
+        User user = new User("ivan");
         Page page = Page.builder()
                 .number(3)
                 .size(3)
                 .build();
-        List<Order> actual = orderDao.findByUserId(userId, page);
-        assertTrue(actual.isEmpty());
+        assertThrows(IllegalStateException.class, () -> orderDao.findByUser(user, page));
+
     }
 
     @Test
     void findByUserIdIncorrectDataShouldThrowExceptionTest() {
         long userId = 1;
-       Page page = Page.builder()
+        Page page = Page.builder()
                 .number(-3)
                 .size(3)
                 .build();
-        assertThrows(InvalidDataAccessApiUsageException.class, () -> orderDao.findByUserId(userId, page));
+        User user = new User();
+        assertThrows(IllegalArgumentException.class, () -> orderDao.findByUser(user, page));
     }
 }

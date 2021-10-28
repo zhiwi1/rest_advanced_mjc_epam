@@ -18,10 +18,8 @@ import javax.persistence.GenerationType;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Audited
-public class Tag {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Tag extends com.epam.esm.entity.Entity {
+
     @NonNull
     private String name;
 }

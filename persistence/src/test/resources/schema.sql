@@ -1,5 +1,5 @@
 
-CREATE TABLE tags
+CREATE  TABLE IF NOT EXISTS  tags
 (
     id   BIGINT       NOT NULL AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
@@ -10,13 +10,13 @@ CREATE TABLE tags
 -- -----------------------------------------------------
 -- Table `mydb`.`certificates`
 -- -----------------------------------------------------
-CREATE TABLE  `certificates`
+CREATE TABLE IF NOT EXISTS `certificates`
 (
     `id`               BIGINT       NOT NULL AUTO_INCREMENT,
     `name`             VARCHAR(100) NOT NULL,
     `price`            DECIMAL(10)  NULL,
-    `create_date`      TIMESTAMP    NULL,
-    `last_update_date` TIMESTAMP    NULL,
+    `createDate`      TIMESTAMP    NULL,
+    `lastUpdateDate` TIMESTAMP    NULL,
     `duration`         INT          NULL,
     `description`      VARCHAR(200) NULL,
     PRIMARY KEY (`id`)
@@ -27,17 +27,16 @@ CREATE TABLE  `certificates`
 -- -----------------------------------------------------
 -- Table `mydb`.`certificate_tags`
 -- -----------------------------------------------------
-CREATE TABLE  `certificate_tags`
+CREATE  TABLE IF NOT EXISTS   `certificate_tags`
 (
     `tag_id`         BIGINT NOT NULL,
     `certificate_id` BIGINT NOT NULL,
     PRIMARY KEY (`tag_id`, `certificate_id`)
-
-)
+   )
 ;
 
 
-CREATE TABLE `users`
+CREATE  TABLE IF NOT EXISTS `users`
 (
     `id`   BIGINT      NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(45) NULL,
@@ -49,13 +48,13 @@ CREATE TABLE `users`
 -- -----------------------------------------------------
 -- Table `mydb`.`certificate_orders`
 -- -----------------------------------------------------
-CREATE TABLE `certificate_orders`
+CREATE TABLE IF NOT EXISTS `certificate_orders`
 (
     `id`             BIGINT      NOT NULL AUTO_INCREMENT,
     `price`          DECIMAL(10) NULL,
-    `create_date`    TIMESTAMP   NULL,
+    `createDate`    TIMESTAMP   NULL,
     `user_id`        BIGINT      NULL,
-    `certificate_id` BIGINT      NULL,
+    `certificateId` BIGINT      NULL,
     PRIMARY KEY (`id`))
 
 ;

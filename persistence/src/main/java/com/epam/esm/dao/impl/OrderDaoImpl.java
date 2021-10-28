@@ -2,6 +2,7 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.OrderDao;
 import com.epam.esm.entity.Order;
+import com.epam.esm.entity.User;
 import com.epam.esm.util.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -14,7 +15,7 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class OrderDaoImpl implements OrderDao {
-    private static final String FIND_BY_USER_ID = "SELECT o FROM Order o WHERE o.userId = :user_id";
+    private static final String FIND_BY_USER_ID = "SELECT o FROM Order o WHERE o.user = :user";
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -25,9 +26,9 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> findByUserId(long userId, Page page) {
+    public List<Order> findByUser(User user, Page page) {
         return entityManager.createQuery(FIND_BY_USER_ID, Order.class)
-                .setParameter("user_id", userId)
+                .setParameter("user", user)
                 .setFirstResult((page.getNumber() - 1) * page.getSize())
                 .setMaxResults(page.getSize())
                 .getResultList();

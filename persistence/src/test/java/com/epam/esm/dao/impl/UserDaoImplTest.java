@@ -1,7 +1,7 @@
 package com.epam.esm.dao.impl;
 
 
-import com.epam.esm.config.DatabaseConfig;
+import com.epam.esm.config.TestDatabaseConfig;
 import com.epam.esm.dao.UserDao;
 import com.epam.esm.entity.User;
 import com.epam.esm.util.Page;
@@ -11,14 +11,14 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
+
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(classes = DatabaseConfig.class)
+@SpringBootTest(classes = TestDatabaseConfig.class)
 class UserDaoImplTest {
 
     private final UserDao userDao;
@@ -30,9 +30,9 @@ class UserDaoImplTest {
 
     public static Object[][] createUsers() {
         return new Object[][]{
-                {new User(1L, "Oleg")},
-                {new User(2L, "Gleb")},
-                {new User(3L, "Ivan")}
+                {new User("Oleg"), 1L},
+                {new User("Gleb"), 2L},
+                {new User("Ivan"), 3L}
         };
     }
 
@@ -63,13 +63,12 @@ class UserDaoImplTest {
                 .number(-3)
                 .size(3)
                 .build();
-        assertThrows(InvalidDataAccessApiUsageException.class, () -> userDao.findAll(page3));
+        assertThrows(IllegalArgumentException.class, () -> userDao.findAll(page3));
     }
 
-   @ParameterizedTest
+    @ParameterizedTest
     @MethodSource("createUsers")
-    void findByIdCorrectDataShouldReturnUserOptionalTest(User user) {
-        long id = user.getId();
+    void findByIdCorrectDataShouldReturnUserOptionalTest(User user, Long id) {
         Optional<User> actual = userDao.findById(id);
         assertEquals(Optional.of(user), actual);
     }

@@ -1,5 +1,6 @@
 package com.epam.esm.dto;
 
+import com.epam.esm.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -28,7 +29,7 @@ public class OrderDto extends RepresentationModel<OrderDto> {
     @JsonSerialize(using = ZonedDateTimeSerializer.class)
     private ZonedDateTime createDate;
     @Min(1)
-    private Long userId;
+    private User user;
     @Min(1)
     private Long certificateId;
 }

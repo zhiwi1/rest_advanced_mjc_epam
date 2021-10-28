@@ -6,17 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
 
+import javax.persistence.*;
 import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.ManyToMany;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.CascadeType;
 
 import java.math.BigDecimal;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Set;
 
@@ -26,10 +20,8 @@ import java.util.Set;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Audited
-public class GiftCertificate {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class GiftCertificate extends com.epam.esm.entity.Entity {
+
     @NonNull
     private String name;
     @NonNull
@@ -42,7 +34,7 @@ public class GiftCertificate {
     private ZonedDateTime lastUpdateDate;
     @NonNull
     private int duration;
-    @ManyToMany(cascade = { CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinTable(
             name = "certificate_tags",
             joinColumns = @JoinColumn(name = "certificate_id"),
@@ -50,4 +42,8 @@ public class GiftCertificate {
     )
     @NonNull
     private Set<Tag> tags;
+    @PreUpdate
+    public void onUpdate() {
+        setLastUpdateDate(ZonedDateTime.now(ZoneId.systemDefault()));
+    }
 }

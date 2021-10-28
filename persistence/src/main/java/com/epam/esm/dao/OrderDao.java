@@ -1,6 +1,7 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.entity.Order;
+import com.epam.esm.entity.User;
 import com.epam.esm.util.Page;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public interface OrderDao {
      * @param page   the page
      * @return the list with orders
      */
-    List<Order> findByUserId(long userId, Page page);
+    List<Order> findByUser(User user, Page page);
 
     /**
      * Find by id optional.

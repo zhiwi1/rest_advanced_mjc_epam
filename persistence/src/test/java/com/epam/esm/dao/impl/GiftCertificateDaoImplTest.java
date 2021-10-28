@@ -1,6 +1,6 @@
 package com.epam.esm.dao.impl;
 
-import com.epam.esm.config.DatabaseConfig;
+import com.epam.esm.config.TestDatabaseConfig;
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.util.Page;
@@ -11,7 +11,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -23,7 +22,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(classes = DatabaseConfig.class)
+@SpringBootTest(classes = TestDatabaseConfig.class)
 @Transactional
 class GiftCertificateDaoImplTest {
 
@@ -37,17 +36,17 @@ class GiftCertificateDaoImplTest {
 
     public static Object[][] createGiftCertificates() {
         return new Object[][]{
-                {new GiftCertificate( "a", "b", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>())},
-                {new GiftCertificate( "2", "123", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>())},
-                {new GiftCertificate( "3", "wow", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>())}
+                {new GiftCertificate("a", "b", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>())},
+                {new GiftCertificate("2", "123", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>())},
+                {new GiftCertificate("3", "wow", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>())}
         };
     }
 
     public static Object[][] createGiftCertificatesTogether() {
         return new Object[][]{
-                {new GiftCertificate( "a", "b", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>()),
-                        new GiftCertificate( "2", "123", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>()),
-                        new GiftCertificate( "3", "wow", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>())
+                {new GiftCertificate("a", "b", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>()),
+                        new GiftCertificate("2", "123", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>()),
+                        new GiftCertificate("3", "wow", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>())
                 }};
     }
 
@@ -88,8 +87,8 @@ class GiftCertificateDaoImplTest {
 
     @ParameterizedTest
     @ValueSource(longs = {100L, 213L, Long.MAX_VALUE, Long.MIN_VALUE})
-    void deleteIncorrectDataShouldThrowExceptionTest(Long id) {
-        assertThrows(InvalidDataAccessApiUsageException.class,() -> giftCertificateDao.delete(id));
+    void shouldThrowExceptionWhenDeleteIncorrectDataTest(Long id) {
+        assertThrows(IllegalArgumentException.class, () -> giftCertificateDao.delete(id));
     }
 
 
@@ -113,7 +112,7 @@ class GiftCertificateDaoImplTest {
 
     @Test
     void shouldReturnUpdatedCertificateTest() {
-        GiftCertificate expected = new GiftCertificate( "a", "b", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>());
+        GiftCertificate expected = new GiftCertificate("a", "b", BigDecimal.ONE, ZonedDateTime.now(), ZonedDateTime.now(), 0, new HashSet<>());
         expected.setId(14L);
         GiftCertificate actual = giftCertificateDao.update(expected);
         assertEquals(expected, actual);
