@@ -20,10 +20,9 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @Audited
 public class Order extends com.epam.esm.entity.Entity {
-
     private BigDecimal price;
     private ZonedDateTime createDate;
-    @ManyToOne
+    @ManyToOne(cascade={CascadeType.PERSIST,CascadeType.MERGE})
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     private Long certificateId;

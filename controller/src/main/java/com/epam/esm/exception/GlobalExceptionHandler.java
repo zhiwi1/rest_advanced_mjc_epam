@@ -54,7 +54,7 @@ class GlobalExceptionHandler {
                 .collect(Collectors.toSet());
     }
 
-
+//todo n+1
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Set<ExceptionResponse> handleResourceNotFoundException(

@@ -52,7 +52,7 @@ public class GiftCertificateQueryCreator {
                                         Root<GiftCertificate> root) {
         List<Predicate> predicates = new ArrayList<>();
         if (ArrayUtils.isNotEmpty(giftCertificateQueryParameters.getTagNames())) {
-            predicates = Arrays.stream(giftCertificateQueryParameters.getTagNames())
+            predicates = Arrays.stream(giftCertificateQueryParameters.getTagNames()).filter(tagName->!tagName.isBlank())
                     .map(tagName -> criteriaBuilder.equal(root.join(TAGS).get(NAME), tagName))
                     .collect(Collectors.toList());
         }
