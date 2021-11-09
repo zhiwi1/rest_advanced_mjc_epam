@@ -3,6 +3,8 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.OrderDto;
 import com.epam.esm.dto.OrderInputDto;
 import com.epam.esm.dto.PageDto;
+import com.epam.esm.expression.HasPermissionAdmin;
+import com.epam.esm.expression.HasPermissionUser;
 import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +44,7 @@ public class OrderController {
      * @return the order dto
      */
     @GetMapping("/{id}")
+    @HasPermissionAdmin
     public OrderDto findById(@PathVariable @Min(MIN_ID_VALUE) long id) {
         OrderDto orderDto = orderService.findById(id);
         linkMapper.mapLinks(orderDto);
@@ -58,6 +61,7 @@ public class OrderController {
      * @return the list with orderDto
      */
     @GetMapping("/users/{userId}")
+    @HasPermissionAdmin
     public List<OrderDto> findByUserId(@PathVariable @Min(MIN_ID_VALUE) long userId,
                                        @RequestParam(required = false, defaultValue = "1") @Range(min = 0) int page,
                                        @RequestParam(required = false, defaultValue = "5") @Range(min = 0) int size) {
@@ -75,6 +79,8 @@ public class OrderController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @HasPermissionAdmin
+    @HasPermissionUser
     public OrderDto create(@RequestBody @Valid OrderInputDto orderInputDto) {
         OrderDto createdOrderDto = orderService.create(orderInputDto);
         linkMapper.mapLinks(createdOrderDto);

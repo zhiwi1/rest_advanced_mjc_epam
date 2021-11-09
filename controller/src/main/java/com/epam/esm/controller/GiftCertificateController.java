@@ -5,6 +5,8 @@ import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.GiftCertificateInputDto;
 import com.epam.esm.dto.GiftCertificateQueryParamDto;
 import com.epam.esm.dto.PageDto;
+import com.epam.esm.expression.HasPermissionAdmin;
+import com.epam.esm.expression.HasPermissionUser;
 import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.GiftCertificateService;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +64,8 @@ public class GiftCertificateController {
      * @return the gift certificate dto
      */
     @GetMapping("/{id}")
+    @HasPermissionUser
+    @HasPermissionAdmin
     public GiftCertificateDto findById(@Min(MIN_ID_VALUE) @PathVariable Long id) {
         GiftCertificateDto giftCertificateDto = giftCertificateService.findById(id);
         linkMapper.mapLinks(giftCertificateDto);
@@ -76,6 +80,8 @@ public class GiftCertificateController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
+    @HasPermissionUser
+    @HasPermissionAdmin
     public GiftCertificateDto create(@Valid @RequestBody GiftCertificateInputDto giftCertificate) {
         return giftCertificateService.create(giftCertificate);
     }
@@ -88,6 +94,8 @@ public class GiftCertificateController {
      * @return the gift certificate dto
      */
     @PatchMapping("/{id}")
+    @HasPermissionUser
+    @HasPermissionAdmin
     public GiftCertificateDto update(@PathVariable @Min(MIN_ID_VALUE) Long id, @Valid @RequestBody GiftCertificateInputDto giftCertificate) {
         return giftCertificateService.update(id, giftCertificate);
     }
@@ -100,6 +108,7 @@ public class GiftCertificateController {
      */
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
+    @HasPermissionAdmin
     public ResponseEntity<Void> delete(@PathVariable @Min(MIN_ID_VALUE) Long id) {
         giftCertificateService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
+@Deprecated(since = "November 2021")
 public class OrderDaoImpl implements OrderDao {
     private static final String FIND_BY_USER_ID = "SELECT o FROM Order o WHERE o.user = :user";
     @PersistenceContext

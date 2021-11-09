@@ -10,5 +10,6 @@ public class ExceptionMessageKey {
     public static final String INVALID_INPUT_WITH_PARAM="invalid_input_param";
     public static final String INVALID_INPUT="invalid_input";
     public static final String DUBLICATE_RESOURCE="dublicate";
+    public static final String FORBIDDEN="forbidden";
 
 }

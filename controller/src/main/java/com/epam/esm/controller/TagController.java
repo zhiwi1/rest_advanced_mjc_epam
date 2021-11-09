@@ -4,6 +4,8 @@ import com.epam.esm.dto.CertificateTagDto;
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagCreateDto;
 import com.epam.esm.dto.TagDto;
+import com.epam.esm.expression.HasPermissionAdmin;
+import com.epam.esm.expression.HasPermissionUser;
 import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.TagService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +37,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 public class TagController {
-    private static final int MIN_ID_VALUE =1;
+    private static final int MIN_ID_VALUE = 1;
     private final TagService tagService;
     private final LinkMapperFacade linkMapper;
 
@@ -61,7 +63,10 @@ public class TagController {
      * @param id the id
      * @return the tag dto
      */
+
     @GetMapping("/{id}")
+    @HasPermissionAdmin
+    @HasPermissionUser
     public TagDto findById(@PathVariable @Min(MIN_ID_VALUE) Long id) {
         TagDto tagDto = tagService.findById(id);
         linkMapper.mapLinks(tagDto);
@@ -76,7 +81,8 @@ public class TagController {
      */
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('USER')")
+    @HasPermissionUser
+    @HasPermissionAdmin
     public TagDto create(@Valid @RequestBody TagCreateDto tagCreateDto) {
         TagDto tagDto = tagService.create(tagCreateDto);
         linkMapper.mapLinks(tagDto);
@@ -91,6 +97,7 @@ public class TagController {
      */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @HasPermissionAdmin
     public ResponseEntity<Void> delete(@PathVariable @Min(MIN_ID_VALUE) Long id) {
         tagService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -103,6 +110,14 @@ public class TagController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/attach")
+    @PreAuthorize("hasPermission('user')")
+    @HasPermissionAdmin
+    @HasPermissionUser
+    //todo @HasPermission()
+    //users 1)local login password 2)google 3)github
+    //google users github users 2 tables
+    //or директория два столбца id, name keycloak directories
+
     public void attachTag(@Valid @RequestBody CertificateTagDto certificateTagDto) {
         tagService.attachTag(certificateTagDto);
     }
@@ -113,6 +128,8 @@ public class TagController {
      * @return the tag dto
      */
     @GetMapping("/popular")
+    @HasPermissionUser
+    @HasPermissionAdmin
     public TagDto findMostPopularTagWithHighestCostOfAllOrders() {
         TagDto tagDto = tagService.findMostPopularTagWithHighestCostOfAllOrders();
         linkMapper.mapLinks(tagDto);

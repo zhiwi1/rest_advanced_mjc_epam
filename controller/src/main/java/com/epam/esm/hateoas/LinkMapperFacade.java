@@ -3,6 +3,7 @@ package com.epam.esm.hateoas;
 import com.epam.esm.controller.GiftCertificateController;
 import com.epam.esm.controller.OrderController;
 import com.epam.esm.controller.TagController;
+//import com.epam.esm.controller.UserController;
 import com.epam.esm.controller.UserController;
 import com.epam.esm.dto.TagCreateDto;
 import com.epam.esm.dto.OrderDto;

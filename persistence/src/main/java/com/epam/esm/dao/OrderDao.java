@@ -10,6 +10,7 @@ import java.util.Optional;
 /**
  * The interface Order dao.
  */
+@Deprecated(since = "November 2021")
 public interface OrderDao {
     /**
      * Create order.

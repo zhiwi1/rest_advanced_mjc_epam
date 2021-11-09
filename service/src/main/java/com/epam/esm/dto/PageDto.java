@@ -12,7 +12,7 @@ import javax.validation.constraints.Min;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PageDto {
-    @Min(1)
+    @Min(0)
     private int number;
     @Min(1)
     private int size;

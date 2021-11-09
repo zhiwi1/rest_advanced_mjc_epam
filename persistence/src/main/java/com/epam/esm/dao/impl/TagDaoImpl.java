@@ -13,7 +13,7 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
-
+@Deprecated(since = "November 2021")
 @Repository
 @RequiredArgsConstructor
 @Slf4j
@@ -21,10 +21,11 @@ public class TagDaoImpl implements TagDao {
     private static final String FIND_ALL = "SELECT tag from Tag tag";
     private static final String FIND_BY_NAME = "SELECT t FROM Tag t WHERE t.name = :name";
     private static final String FIND_THE_MOST_WIDELY_USED_TAG =
-            "  select tags.name,tags.id from tags " +
-                    "join certificate_tags on tags.id=certificate_tags.tag_id where certificate_tags.certificate_id in " +
-                    " (select certificate_id from certificate_orders where user_id= " +
-                    "(select user_id from certificate_orders group by user_id order by sum(price) desc limit 1) )";
+          "  select tags.name,tags.id from tags " +
+                  "join certificate_tags on tags.id=certificate_tags.tag_id " +
+                  "where certificate_tags.certificate_id in (select certificateId from certificate_orders" +
+                  " where user_id=(select user_id from certificate_orders group by user_id order by sum(price) desc limit 1) ) " +
+                  "group by tags.id order by count(tags.id) desc limit 1";
 
     @PersistenceContext
     private EntityManager entityManager;

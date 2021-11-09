@@ -3,6 +3,7 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.UserDto;
+import com.epam.esm.expression.HasPermissionAdmin;
 import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import java.util.List;
 @RequestMapping("/v2/users")
 @RequiredArgsConstructor
 @Validated
+@HasPermissionAdmin
 public class UserController {
     private static final int MIN_ID_VALUE =1;
     private final UserService userService;
