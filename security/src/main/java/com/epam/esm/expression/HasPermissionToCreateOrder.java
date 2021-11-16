@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("customPerm('user')")
-public @interface HasPermissionUser {
+@PreAuthorize("hasPermissionToCreateOrder(#orderInputDto)")
+public @interface HasPermissionToCreateOrder {
 }

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.keycloak.adapters.KeycloakConfigResolver;
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
+import org.keycloak.adapters.springsecurity.KeycloakSecurityComponents;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.keycloak.adapters.springsecurity.filter.KeycloakAuthenticatedActionsFilter;
@@ -17,6 +18,7 @@ import org.keycloak.adapters.springsecurity.filter.KeycloakSecurityContextReques
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,14 +38,13 @@ public class KeyCloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
 
     @Override
     protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-        //return new NullAuthenticatedSessionStrategy();
         return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
     }
 
-//todo var
+
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder authManagerBuilder) {
-        var keycloakAuthenticationProvider = keycloakAuthenticationProvider();
+        KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
         keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
         authManagerBuilder.authenticationProvider(keycloakAuthenticationProvider);
     }
@@ -53,52 +54,29 @@ public class KeyCloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
         return new KeycloakSpringBootConfigResolver();
     }
 
-    @Bean
-    public FilterRegistrationBean keycloakAuthenticationProcessingFilterRegistrationBean(
-            KeycloakAuthenticationProcessingFilter filter) {
-        FilterRegistrationBean registrationBean = new FilterRegistrationBean(filter);
-        registrationBean.setEnabled(false);
-        return registrationBean;
-    }
-
-    @Bean
-    public FilterRegistrationBean keycloakPreAuthActionsFilterRegistrationBean(
-            KeycloakPreAuthActionsFilter filter) {
-        FilterRegistrationBean registrationBean = new FilterRegistrationBean(filter);
-        registrationBean.setEnabled(false);
-        return registrationBean;
-    }
-
-    @Bean
-    public FilterRegistrationBean keycloakAuthenticatedActionsFilterBean(
-            KeycloakAuthenticatedActionsFilter filter) {
-        FilterRegistrationBean registrationBean = new FilterRegistrationBean(filter);
-        registrationBean.setEnabled(false);
-        return registrationBean;
-    }
-
-    @Bean
-    public FilterRegistrationBean keycloakSecurityContextRequestFilterBean(
-            KeycloakSecurityContextRequestFilter filter) {
-        FilterRegistrationBean registrationBean = new FilterRegistrationBean(filter);
-        registrationBean.setEnabled(false);
-        return registrationBean;
-    }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
-        http .csrf().disable().authorizeRequests()
-                .anyRequest().permitAll()
-                .and()
+        http
+                .authorizeRequests()
+                .antMatchers("/v2/certificates/**").permitAll()
+                .anyRequest().authenticated().and()
+                .csrf().disable()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .addFilterAfter(new SecurityUserFilter(userService), BasicAuthenticationFilter.class)
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                ;
 
-//            .authorizeRequests().anyRequest().permitAll().
-////                and()
-////                .addFilterAfter(new SecurityUserFilter(userService), BasicAuthenticationFilter.class).
-////                sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); http.csrf().disable()
-//
 
     }
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        super.configure(http);
+//        http.csrf().disable()
+//                .authorizeRequests().anyRequest().permitAll().and()
+//               // .addFilterAfter(new SecurityUserFilter(userService), BasicAuthenticationFilter.class)
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//
+//
+//    }
 
 }

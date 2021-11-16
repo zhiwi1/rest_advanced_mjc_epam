@@ -2,18 +2,12 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.datajpa.DataUserDao;
 import com.epam.esm.dto.PageDto;
-import com.epam.esm.dto.TagCreateDto;
 import com.epam.esm.dto.UserDto;
-import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.User;
-import com.epam.esm.exception.DublicateResourceException;
 import com.epam.esm.exception.ResourceNotFoundException;
-import com.epam.esm.mapper.ServicePageMapper;
 import com.epam.esm.mapper.ServiceUserMapper;
 import com.epam.esm.service.UserService;
-import com.epam.esm.util.Page;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -55,9 +49,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto create(UserDto value) {
+        throw new UnsupportedOperationException("Method is not supported by current implementation");
+    }
+
+    @Override
     @Transactional
-    public UserDto create(UserDto userDto) {
+    public UserDto createIfNotExist(UserDto userDto) {
         Optional<User> optional = userDao.findByName(userDto.getName());
+        System.out.println(optional);
+        System.out.println( optional.get().getId());
         if (optional.isEmpty()) {
             return userMapper.toDto(userDao.save(userMapper.toEntity(userDto)));
         }

@@ -1,23 +1,20 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.datajpa.DataGiftCertificateDao;
-import com.epam.esm.dto.*;
+import com.epam.esm.dto.GiftCertificateInputDto;
+import com.epam.esm.dto.GiftCertificateQueryParamDto;
+import com.epam.esm.dto.GiftCertificateDto;
+import com.epam.esm.dto.PageDto;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.DublicateResourceException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.ServiceGiftCertificateMapper;
 import com.epam.esm.mapper.ServiceGiftCertificateQueryParamMapper;
-import com.epam.esm.mapper.ServicePageMapper;
 import com.epam.esm.service.GiftCertificateService;
-import com.epam.esm.util.GiftCertificateQueryParam;
 import com.epam.esm.util.GiftCertificateSpecification;
 
 import lombok.RequiredArgsConstructor;
 
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -34,7 +31,6 @@ import java.util.stream.Collectors;
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final DataGiftCertificateDao giftCertificateDao;
     private final ServiceGiftCertificateMapper certificateMapper;
-    private final ServiceGiftCertificateQueryParamMapper queryParamMapper;
 
     @Transactional
     @Override

@@ -1,8 +1,5 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.dao.GiftCertificateDao;
-import com.epam.esm.dao.OrderDao;
-import com.epam.esm.dao.UserDao;
 import com.epam.esm.dao.datajpa.DataGiftCertificateDao;
 import com.epam.esm.dao.datajpa.DataOrderDao;
 import com.epam.esm.dao.datajpa.DataUserDao;
@@ -11,15 +8,12 @@ import com.epam.esm.dto.OrderInputDto;
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
-import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.User;
-import com.epam.esm.exception.DublicateResourceException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.ServiceOrderMapper;
-import com.epam.esm.mapper.ServicePageMapper;
 import com.epam.esm.service.OrderService;
-import com.epam.esm.util.Page;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,13 +29,12 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService {
     private final DataOrderDao orderDao;
     private final DataGiftCertificateDao certificateDao;
     private final DataUserDao userDao;
     private final ServiceOrderMapper mapper;
-    private final ServicePageMapper pageMapper;
-
 
     @Transactional
     @Override
@@ -53,12 +46,14 @@ public class OrderServiceImpl implements OrderService {
         }
         order.setUser(existingUser.get());
         List<GiftCertificate> certificates = new ArrayList<>();
+
         Arrays.asList(orderDto.getCertificateId()).forEach(id -> {
             Optional<GiftCertificate> optional = certificateDao.findById(id);
             if (optional.isEmpty()) {
                 //todo another one
                 throw new ResourceNotFoundException(orderDto.getUserId());
             }
+            log.info(optional.get().toString());
             certificates.add(optional.get());
             orderDto.setPrice(orderDto.getPrice().add(optional.get().getPrice()));
         });

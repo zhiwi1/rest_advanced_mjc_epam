@@ -1,7 +1,5 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.dao.GiftCertificateDao;
-import com.epam.esm.dao.TagDao;
 import com.epam.esm.dao.datajpa.DataGiftCertificateDao;
 import com.epam.esm.dao.datajpa.DataTagDao;
 import com.epam.esm.dto.CertificateTagDto;
@@ -12,10 +10,8 @@ import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.DublicateResourceException;
 import com.epam.esm.exception.ResourceNotFoundException;
-import com.epam.esm.mapper.ServicePageMapper;
 import com.epam.esm.mapper.ServiceTagMapper;
 import com.epam.esm.service.TagService;
-import com.epam.esm.util.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +29,6 @@ public class TagServiceImpl implements TagService {
     private final DataTagDao tagDao;
     private final DataGiftCertificateDao giftCertificateDao;
     private final ServiceTagMapper tagMapper;
-    private final ServicePageMapper pageMapper;
 
 
     @Transactional
@@ -47,7 +42,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<TagDto> findAll(PageDto pageDto) {
-        Pageable pageRequest = PageRequest.of(pageDto.getNumber(),pageDto.getSize());
+        Pageable pageRequest = PageRequest.of(pageDto.getNumber(), pageDto.getSize());
         List<Tag> foundTags = tagDao.findAll(pageRequest).getContent();
         return foundTags.stream()
                 .map(tagMapper::toDto)

@@ -1,9 +1,7 @@
 package com.epam.esm.mapper;
 
-import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.UserDto;
 import com.epam.esm.entity.User;
-import com.epam.esm.util.Page;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -18,6 +16,10 @@ public class ServiceUserMapper {
     }
 
     public UserDto toDto(User user) {
-        return modelMapper.map(user,UserDto.class);
+        //todo
+        return UserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .build();
     }
 }

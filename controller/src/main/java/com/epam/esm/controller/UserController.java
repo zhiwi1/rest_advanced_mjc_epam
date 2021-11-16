@@ -8,6 +8,7 @@ import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ import java.util.List;
 @RequestMapping("/v2/users")
 @RequiredArgsConstructor
 @Validated
-@HasPermissionAdmin
+@PreAuthorize("hasRole('admin')")
 public class UserController {
     private static final int MIN_ID_VALUE =1;
     private final UserService userService;

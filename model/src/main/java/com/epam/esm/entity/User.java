@@ -20,16 +20,4 @@ import java.util.Set;
 @Audited
 public class User extends com.epam.esm.entity.Entity {
     private String name;
-    private String password;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_privileges",
-            joinColumns =
-            @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns =
-            @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
-    private Set<Privilege> privileges;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "organization_id", referencedColumnName = "id")
-    private Organization organization;
     }

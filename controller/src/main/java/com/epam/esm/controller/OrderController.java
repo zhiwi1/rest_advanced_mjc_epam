@@ -3,13 +3,14 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.OrderDto;
 import com.epam.esm.dto.OrderInputDto;
 import com.epam.esm.dto.PageDto;
-import com.epam.esm.expression.HasPermissionAdmin;
-import com.epam.esm.expression.HasPermissionUser;
+import com.epam.esm.expression.HasPermissionToCreateOrder;
+import com.epam.esm.expression.HasPermissionToFindByUserId;
 import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 public class OrderController {
-    private static final int MIN_ID_VALUE =1;
+    private static final int MIN_ID_VALUE = 1;
     private final OrderService orderService;
     private final LinkMapperFacade linkMapper;
 
@@ -44,7 +45,7 @@ public class OrderController {
      * @return the order dto
      */
     @GetMapping("/{id}")
-    @HasPermissionAdmin
+    @PreAuthorize("hasRole('admin')")
     public OrderDto findById(@PathVariable @Min(MIN_ID_VALUE) long id) {
         OrderDto orderDto = orderService.findById(id);
         linkMapper.mapLinks(orderDto);
@@ -61,8 +62,8 @@ public class OrderController {
      * @return the list with orderDto
      */
     @GetMapping("/users/{userId}")
-    @HasPermissionAdmin
-    public List<OrderDto> findByUserId(@PathVariable @Min(MIN_ID_VALUE) long userId,
+    @HasPermissionToFindByUserId
+    public List<OrderDto> findByUserId(@PathVariable @Min(MIN_ID_VALUE) Long userId,
                                        @RequestParam(required = false, defaultValue = "1") @Range(min = 0) int page,
                                        @RequestParam(required = false, defaultValue = "5") @Range(min = 0) int size) {
         PageDto pageDto = new PageDto(page, size);
@@ -79,8 +80,7 @@ public class OrderController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @HasPermissionAdmin
-    @HasPermissionUser
+    @HasPermissionToCreateOrder
     public OrderDto create(@RequestBody @Valid OrderInputDto orderInputDto) {
         OrderDto createdOrderDto = orderService.create(orderInputDto);
         linkMapper.mapLinks(createdOrderDto);

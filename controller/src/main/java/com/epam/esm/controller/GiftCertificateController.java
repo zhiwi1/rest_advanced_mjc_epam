@@ -5,13 +5,12 @@ import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.GiftCertificateInputDto;
 import com.epam.esm.dto.GiftCertificateQueryParamDto;
 import com.epam.esm.dto.PageDto;
-import com.epam.esm.expression.HasPermissionAdmin;
-import com.epam.esm.expression.HasPermissionUser;
 import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.GiftCertificateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,8 +63,6 @@ public class GiftCertificateController {
      * @return the gift certificate dto
      */
     @GetMapping("/{id}")
-    @HasPermissionUser
-    @HasPermissionAdmin
     public GiftCertificateDto findById(@Min(MIN_ID_VALUE) @PathVariable Long id) {
         GiftCertificateDto giftCertificateDto = giftCertificateService.findById(id);
         linkMapper.mapLinks(giftCertificateDto);
@@ -80,8 +77,7 @@ public class GiftCertificateController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    @HasPermissionUser
-    @HasPermissionAdmin
+    @PreAuthorize("hasRole('admin') or hasRole('user')")
     public GiftCertificateDto create(@Valid @RequestBody GiftCertificateInputDto giftCertificate) {
         return giftCertificateService.create(giftCertificate);
     }
@@ -94,8 +90,7 @@ public class GiftCertificateController {
      * @return the gift certificate dto
      */
     @PatchMapping("/{id}")
-    @HasPermissionUser
-    @HasPermissionAdmin
+    @PreAuthorize("hasRole('admin') or hasRole('user')")
     public GiftCertificateDto update(@PathVariable @Min(MIN_ID_VALUE) Long id, @Valid @RequestBody GiftCertificateInputDto giftCertificate) {
         return giftCertificateService.update(id, giftCertificate);
     }
@@ -108,7 +103,7 @@ public class GiftCertificateController {
      */
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    @HasPermissionAdmin
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<Void> delete(@PathVariable @Min(MIN_ID_VALUE) Long id) {
         giftCertificateService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

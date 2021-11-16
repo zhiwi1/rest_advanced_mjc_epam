@@ -1,23 +1,17 @@
 package com.epam.esm.util;
 
-import com.epam.esm.dto.GiftCertificateQueryParamDto;
-import com.epam.esm.entity.*;
-
-import lombok.RequiredArgsConstructor;
+import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.OrderType;
+import com.epam.esm.entity.SortType;
 import lombok.experimental.UtilityClass;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
-
-import javax.persistence.criteria.*;
-import javax.persistence.criteria.Order;
-import java.util.ArrayList;
-import java.util.Arrays;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
 @UtilityClass
 public class GiftCertificateSpecification {
@@ -60,7 +54,8 @@ public class GiftCertificateSpecification {
                     query.orderBy(criteriaBuilder.desc(root.get(orderFieldName)));
                 } else {
                     query.orderBy(criteriaBuilder.asc(root.get(orderFieldName)));
-                }}
+                }
+            }
             return null;
         };
 

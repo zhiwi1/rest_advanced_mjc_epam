@@ -27,7 +27,7 @@ public class LinkMapperFacade {
     private final ServiceGiftCertificateMapper certificateMapper;
 
     public void mapLinks(TagDto tagDto) {
-        tagDto.add(linkTo(methodOn(TagController.class).findById(tagDto.getId())).withSelfRel());
+        tagDto.add(linkTo(methodOn(TagController.class).findById(tagDto.getId(),null)).withSelfRel());
         tagDto.add(linkTo(methodOn(TagController.class).delete(tagDto.getId())).withRel("delete"));
         tagDto.add(linkTo(methodOn(TagController.class).create(new TagCreateDto(tagDto.getName()))).withRel("create"));
     }
