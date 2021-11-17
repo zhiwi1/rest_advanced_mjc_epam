@@ -50,7 +50,6 @@ public class OrderServiceImpl implements OrderService {
         Arrays.asList(orderDto.getCertificateId()).forEach(id -> {
             Optional<GiftCertificate> optional = certificateDao.findById(id);
             if (optional.isEmpty()) {
-                //todo another one
                 throw new ResourceNotFoundException(orderDto.getUserId());
             }
             log.info(optional.get().toString());

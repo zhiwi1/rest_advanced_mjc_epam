@@ -114,11 +114,6 @@ public class TagController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/attach")
-//    @HasPermissionAdmin
-    //todo @HasPermission()
-    //users 1)local login password 2)google 3)github
-    //google users github users 2 tables
-    //or директория два столбца id, name keycloak directories
     @PreAuthorize("hasRole('admin') or hasRole('user')")
     public void attachTag(@Valid @RequestBody CertificateTagDto certificateTagDto) {
         tagService.attachTag(certificateTagDto);
