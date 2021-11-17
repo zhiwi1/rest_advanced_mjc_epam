@@ -57,8 +57,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto createIfNotExist(UserDto userDto) {
         Optional<User> optional = userDao.findByName(userDto.getName());
-        System.out.println(optional);
-        System.out.println( optional.get().getId());
         if (optional.isEmpty()) {
             return userMapper.toDto(userDao.save(userMapper.toEntity(userDto)));
         }

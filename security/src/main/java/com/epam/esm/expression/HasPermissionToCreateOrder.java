@@ -7,8 +7,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ ElementType.METHOD, ElementType.TYPE })
+/**
+ * The annotation Has permission to create order.
+ * create order can only role user for current user id or admin
+ */
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasPermissionToCreateOrder(#orderInputDto)")
+@PreAuthorize("(hasPermissionByUserId(#orderInputDto.userId) and hasRole('user')) or hasRole('admin')")
 public @interface HasPermissionToCreateOrder {
 }

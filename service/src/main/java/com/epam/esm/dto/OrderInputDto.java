@@ -8,7 +8,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Min;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 @Builder

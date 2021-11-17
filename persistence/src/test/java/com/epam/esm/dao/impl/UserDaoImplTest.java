@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+@Deprecated
 @SpringBootTest(classes = TestDatabaseConfig.class)
 class UserDaoImplTest {
 

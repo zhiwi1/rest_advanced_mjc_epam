@@ -12,7 +12,6 @@ public class CustomMethodSecurityExpressionHandler extends DefaultMethodSecurity
     private final UserService userService;
 
     @Override
-
     protected MethodSecurityExpressionOperations createSecurityExpressionRoot(
             Authentication authentication, MethodInvocation invocation) {
         return new CustomMethodSecurityExpressionRoot(authentication,userService);

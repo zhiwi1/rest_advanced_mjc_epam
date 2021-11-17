@@ -21,6 +21,7 @@ import java.util.Properties;
 
 @SpringBootConfiguration
 @ComponentScan("com.epam.esm")
+@Deprecated
 public class TestDatabaseConfig {
     @Bean
     public DataSource embeddedDatabase() {

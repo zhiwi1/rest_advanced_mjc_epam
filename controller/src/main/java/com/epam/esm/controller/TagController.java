@@ -4,7 +4,6 @@ import com.epam.esm.dto.CertificateTagDto;
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagCreateDto;
 import com.epam.esm.dto.TagDto;
-import com.epam.esm.expression.HasPermissionToCreateOrder;
 import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.TagService;
 import lombok.RequiredArgsConstructor;

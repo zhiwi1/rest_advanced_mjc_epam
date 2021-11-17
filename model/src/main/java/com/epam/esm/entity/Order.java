@@ -6,7 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
 
-import javax.persistence.*;
+import javax.persistence.Table;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.CascadeType;
+import javax.persistence.ManyToMany;
+import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
+import javax.persistence.PrePersist;
 import javax.persistence.Entity;
 import java.math.BigDecimal;
 import java.time.ZoneId;

@@ -16,10 +16,6 @@ public class ServiceUserMapper {
     }
 
     public UserDto toDto(User user) {
-        //todo
-        return UserDto.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .build();
+        return modelMapper.map(user, UserDto.class);
     }
 }

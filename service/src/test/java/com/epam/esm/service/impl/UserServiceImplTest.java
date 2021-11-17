@@ -1,13 +1,12 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.config.ServiceConfiguration;
-import com.epam.esm.dao.UserDao;
+import com.epam.esm.dao.datajpa.DataUserDao;
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.UserDto;
 import com.epam.esm.entity.User;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.UserService;
-import com.epam.esm.util.Page;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -15,6 +14,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +29,7 @@ import static org.mockito.Mockito.when;
 class UserServiceImplTest {
 
     @MockBean
-    private UserDao userDao;
+    private DataUserDao userDao;
     @Autowired
     private UserService userService;
 
@@ -60,7 +61,7 @@ class UserServiceImplTest {
     @MethodSource("createUsers")
     void findAllUsersCorrectDataShouldReturnListOfUserDtoTest(User user1, User user2) {
         int expected = 2;
-        when(userDao.findAll(any(Page.class))).thenReturn(Arrays.asList(user1, user2));
+        when(userDao.findAll(any(Pageable.class))).thenReturn(new PageImpl<User>(Arrays.asList(user1, user2)));
         List<UserDto> actual = userService.findAll(pageDto1);
         assertEquals(expected, actual.size());
     }
@@ -68,8 +69,8 @@ class UserServiceImplTest {
     @ParameterizedTest
     @MethodSource("createUsers")
     void findAllUsersIncorrectDataShouldThrowExceptionTest(User user1, User user2) {
-        when(userDao.findAll(any(Page.class))).thenReturn(Arrays.asList(user1, user2));
-        assertDoesNotThrow(() -> userService.findAll(pageDto2));
+        when(userDao.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(Arrays.asList(user1, user2)));
+        assertThrows(IllegalArgumentException.class,() -> userService.findAll(pageDto2));
     }
 
     @ParameterizedTest

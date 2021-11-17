@@ -19,7 +19,6 @@ public class GiftCertificateSpecification {
     private static final String CERTIFICATE_TAGS_ATTRIBUTE_NAME = "tags";
     private static final String NAME_ATTRIBUTE = "name";
     private static final String DESCRIPTION_ATTRIBUTE = "description";
-    private static final String SQL_ASC = "ASC";
 
 
     public Specification<GiftCertificate> nameLike(String name) {

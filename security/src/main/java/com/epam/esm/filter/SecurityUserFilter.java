@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.representations.AccessToken;
-import org.keycloak.representations.idm.authorization.Permission;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ObjectUtils;
@@ -30,21 +29,9 @@ public class SecurityUserFilter extends GenericFilterBean {
             var principal = (KeycloakPrincipal<KeycloakSecurityContext>) authentication.getPrincipal();
             AccessToken accessToken = principal.getKeycloakSecurityContext().getToken();
             var userDto = UserDto.builder().name(accessToken.getPreferredUsername()).build();
-            if(userDto!=null){
-                userDto=userService.createIfNotExist(userDto);
+            if (userDto != null) {
+                userService.createIfNotExist(userDto);
             }
-         principal.getKeycloakSecurityContext().getToken().getId();
-//            Optional.ofNullable(userDto).ifPresent(userService::createIfNotExist);
-            System.out.println(userDto);
-            Permission permission = new Permission();
-            permission.setResourceId(userDto.getId().toString());
-
-
-//            CustomAuthentication customAuthentication = new CustomAuthentication(authentication);
-//            customAuthentication.setDetails(userDto.getId());
-//
-//            System.out.println("filter");
-//            SecurityContextHolder.getContext().setAuthentication(customAuthentication);
         }
         chain.doFilter(request, response);
     }

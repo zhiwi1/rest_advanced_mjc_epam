@@ -93,8 +93,7 @@ class TagControllerTest {
                         .when().get("http://localhost:8001/v2/users/1");
         Assertions.assertEquals(403,response.getStatusCode());
     }
-    //    @Test
-    //    void
+
 }
 
 

@@ -9,7 +9,6 @@ import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.exception.DublicateResourceException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.ServiceGiftCertificateMapper;
-import com.epam.esm.mapper.ServiceGiftCertificateQueryParamMapper;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.util.GiftCertificateSpecification;
 

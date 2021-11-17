@@ -7,7 +7,13 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.Entity;
-import javax.persistence.*;
+import javax.persistence.Table;
+import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.FetchType;
+import javax.persistence.CascadeType;
+import javax.persistence.JoinTable;
+import javax.persistence.PreUpdate;
 import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
