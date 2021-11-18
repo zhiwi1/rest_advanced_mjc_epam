@@ -9,8 +9,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 @UtilityClass
@@ -33,32 +32,30 @@ public class GiftCertificateSpecification {
 
     public Specification<GiftCertificate> findByTags(String[] arrayOftags) {
         return (root, query, criteriaBuilder) -> {
-            if (ObjectUtils.isNotEmpty(arrayOftags)) {
-                Join<GiftCertificate, Tag> join = root.join(CERTIFICATE_TAGS_ATTRIBUTE_NAME, JoinType.INNER);
-                query.groupBy(root);
-                List<String> tags = List.of(arrayOftags);
-                query.having(criteriaBuilder.equal(criteriaBuilder.count(root), tags.size()));
-                return criteriaBuilder.in(join.get(NAME_ATTRIBUTE)).value(tags);
-            } else {
+            if (ObjectUtils.isEmpty(arrayOftags)) {
                 return null;
             }
+            Join<GiftCertificate, Tag> join = root.join(CERTIFICATE_TAGS_ATTRIBUTE_NAME, JoinType.INNER);
+            query.groupBy(root);
+            List<String> tags = List.of(arrayOftags);
+            query.having(criteriaBuilder.equal(criteriaBuilder.count(root), tags.size()));
+            return criteriaBuilder.in(join.get(NAME_ATTRIBUTE)).value(tags);
         };
     }
 
     public Specification<GiftCertificate> havingOrderAndSort(OrderType order, SortType sort) {
         return (root, query, criteriaBuilder) -> {
-            if (order != null) {
-                String orderFieldName = order.getName();
-                if (isSortTypeIsPresentAndEqualsDesc(sort)) {
-                    query.orderBy(criteriaBuilder.desc(root.get(orderFieldName)));
-                } else {
-                    query.orderBy(criteriaBuilder.asc(root.get(orderFieldName)));
-                }
+            if (ObjectUtils.isEmpty(order)) {
+                return null;
             }
+            String orderFieldName = order.getName();
+            createQueryOrderByAndSort(sort, query, criteriaBuilder, orderFieldName, root);
             return null;
         };
+    }
 
-
+    private CriteriaQuery createQueryOrderByAndSort(SortType sort, CriteriaQuery query, CriteriaBuilder criteriaBuilder, String orderFieldName, Root<GiftCertificate> root) {
+        return isSortTypeIsPresentAndEqualsDesc(sort) ? query.orderBy(criteriaBuilder.desc(root.get(orderFieldName))) : query.orderBy(criteriaBuilder.asc(root.get(orderFieldName)));
     }
 
     private static boolean isSortTypeIsPresentAndEqualsDesc(SortType sortType) {

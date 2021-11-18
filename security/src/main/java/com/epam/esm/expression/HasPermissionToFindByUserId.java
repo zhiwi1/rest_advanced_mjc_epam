@@ -2,17 +2,19 @@ package com.epam.esm.expression;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.Target;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
 /**
- * The interface Has permission to find by user id.
- * find order by user id can only role user for current user_id or admin
+ * The annotation Has permission to find by user id.
+ * The order can be founded only by USER role with current userId or by ADMIN.
  */
-@Target({ ElementType.METHOD, ElementType.TYPE })
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
+@Documented
 @PreAuthorize("(hasPermissionByUserId(#userId) and hasRole('user')) or hasRole('admin')")
 public @interface HasPermissionToFindByUserId {
 }

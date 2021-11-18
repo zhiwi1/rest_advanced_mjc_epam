@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Deprecated(since = "November 2021")
+@Deprecated(since = "version 3")
 @Data
 @Builder
 @NoArgsConstructor

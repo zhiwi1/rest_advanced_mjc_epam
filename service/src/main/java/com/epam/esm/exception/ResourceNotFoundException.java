@@ -7,14 +7,14 @@ import lombok.Getter;
  */
 @Getter
 public class ResourceNotFoundException extends ServiceException {
-    private final Long[] id;
+    private final Object[] id;
 
     /**
      * Instantiates a new Resource not found exception.
      *
      * @param id the id
      */
-    public ResourceNotFoundException(Long... id) {
+    public ResourceNotFoundException(Object... id) {
         super();
         this.id = id;
     }

@@ -5,6 +5,7 @@ plugins {
 }
 
 allprojects {
+    version = '3'
     group = 'com.epam.esm'
     sourceCompatibility = '11'
     targetCompatibility = '11'

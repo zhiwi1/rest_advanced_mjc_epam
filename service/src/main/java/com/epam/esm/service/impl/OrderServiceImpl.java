@@ -3,6 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.dao.datajpa.DataGiftCertificateDao;
 import com.epam.esm.dao.datajpa.DataOrderDao;
 import com.epam.esm.dao.datajpa.DataUserDao;
+import com.epam.esm.dto.OrderCreateDto;
 import com.epam.esm.dto.OrderDto;
 import com.epam.esm.dto.OrderInputDto;
 import com.epam.esm.dto.PageDto;
@@ -39,20 +40,17 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public OrderDto create(OrderInputDto orderDto) {
-        Order order = mapper.toEntity(orderDto);
-        Optional<User> existingUser = userDao.findById(orderDto.getUserId());
+
+        Optional<User> existingUser = userDao.findByName(orderDto.getNameOfUser());
         if (existingUser.isEmpty()) {
-            throw new ResourceNotFoundException(orderDto.getUserId());
+            throw new ResourceNotFoundException(orderDto.getNameOfUser());
         }
+        Order order = mapper.toEntity(orderDto);
         order.setUser(existingUser.get());
         List<GiftCertificate> certificates = new ArrayList<>();
-
         Arrays.asList(orderDto.getCertificateId()).forEach(id -> {
             Optional<GiftCertificate> optional = certificateDao.findById(id);
-            if (optional.isEmpty()) {
-                throw new ResourceNotFoundException(orderDto.getUserId());
-            }
-            log.info(optional.get().toString());
+            optional.orElseThrow(() -> new ResourceNotFoundException(orderDto.getCertificateId()));
             certificates.add(optional.get());
             orderDto.setPrice(orderDto.getPrice().add(optional.get().getPrice()));
         });

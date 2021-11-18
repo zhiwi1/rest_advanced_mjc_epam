@@ -22,7 +22,7 @@ import java.util.List;
  * The type User controller.
  */
 @RestController
-@RequestMapping("/v2/users")
+@RequestMapping("/v3/users")
 @RequiredArgsConstructor
 @Validated
 @PreAuthorize("hasRole('admin')")
@@ -39,7 +39,7 @@ public class UserController {
      * @return the list of user's dto
      */
     @GetMapping
-    public List<UserDto> findAll(@RequestParam(required = false, defaultValue = "1") @Range(min = 1) int page,
+    public List<UserDto> findAll(@RequestParam(required = false, defaultValue = "0") @Range(min = 1) int page,
                                  @RequestParam(required = false, defaultValue = "5") @Range(min = 1) int size) {
         PageDto pageDto = new PageDto(page, size);
         List<UserDto> userDtoList = userService.findAll(pageDto);

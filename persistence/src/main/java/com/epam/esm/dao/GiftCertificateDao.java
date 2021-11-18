@@ -11,7 +11,7 @@ import java.util.Optional;
 /**
  * The interface Gift certificate dao.
  */
-@Deprecated(since = "November 2021")
+@Deprecated(since = "version 3")
 public interface GiftCertificateDao extends BaseDao<GiftCertificate, Long> {
 
     List<GiftCertificate> findByQueryParameters(

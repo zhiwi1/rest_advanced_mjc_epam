@@ -13,8 +13,8 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderInputDto {
-    private String nameOfUser;
+public class OrderCreateDto {
+    private Long idOfUser;
     @NotEmpty
     private Long[] certificateId;
     @Min(0)

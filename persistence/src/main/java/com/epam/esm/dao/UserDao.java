@@ -9,7 +9,7 @@ import java.util.Optional;
 /**
  * The interface User dao.
  */
-@Deprecated(since = "November 2021")
+@Deprecated(since = "version 3")
 public interface UserDao  {
     /**
      * Find all list.

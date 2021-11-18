@@ -51,7 +51,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDto create(TagDto value) {
-        return null;
+        throw new UnsupportedOperationException("Method is not supported by current implementation");
     }
 
     @Override

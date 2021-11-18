@@ -1,16 +1,18 @@
 package com.epam.esm.expression;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
 
+@Slf4j
 public class CustomPermissionEvaluator implements PermissionEvaluator {
     @Override
     public boolean hasPermission(
             Authentication auth, Object targetDomainObject, Object permission) {
         if ((auth == null) || (targetDomainObject == null) || !(permission instanceof String)) {
+            log.error("Authentication = {}, targetDomainObject = {}, permission = {} \nError: check your input", auth, targetDomainObject, permission);
             return false;
         }
         String targetType = targetDomainObject.getClass().getSimpleName().toUpperCase();
@@ -21,6 +23,7 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
     public boolean hasPermission(
             Authentication auth, Serializable targetId, String targetType, Object permission) {
         if ((auth == null) || (targetType == null) || !(permission instanceof String)) {
+            log.error("Authentication = {}, targetType = {}, permission = {} \nError: check your input", auth, targetType, permission);
             return false;
         }
         return hasPrivilege(auth, targetType.toUpperCase(),
@@ -28,12 +31,7 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
     }
 
     private boolean hasPrivilege(Authentication auth, String targetType, String permission) {
-        for (GrantedAuthority grantedAuth : auth.getAuthorities()) {
-            if (grantedAuth.getAuthority().startsWith(targetType) &&
-                    grantedAuth.getAuthority().contains(permission)) {
-                return true;
-            }
-        }
-        return false;
+        return auth.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().startsWith(targetType) &&
+                grantedAuthority.getAuthority().contains(permission));
     }
 }

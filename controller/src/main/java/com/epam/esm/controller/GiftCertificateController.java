@@ -31,10 +31,9 @@ import java.util.List;
  * The type Gift certificate controller.
  */
 @RestController
-@RequestMapping("/v2/certificates")
+@RequestMapping("/v3/certificates")
 @RequiredArgsConstructor
 @Validated
-
 public class GiftCertificateController {
     private final GiftCertificateService giftCertificateService;
     private final LinkMapperFacade linkMapper;
@@ -50,7 +49,7 @@ public class GiftCertificateController {
      */
     @GetMapping
     public List<GiftCertificateDto> findGiftCertificates(@Valid @RequestBody GiftCertificateQueryParamDto giftCertificateQueryParametersDto,
-                                                         @RequestParam(required = false, defaultValue = "1") int page,
+                                                         @RequestParam(required = false, defaultValue = "0") int page,
                                                          @RequestParam(required = false, defaultValue = "5") int size) {
         PageDto pageDto = new PageDto(page, size);
         return giftCertificateService.findGiftCertificates(giftCertificateQueryParametersDto, pageDto);

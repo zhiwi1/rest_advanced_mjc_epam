@@ -3,7 +3,6 @@ package com.epam.esm.hateoas;
 import com.epam.esm.controller.GiftCertificateController;
 import com.epam.esm.controller.OrderController;
 import com.epam.esm.controller.TagController;
-//import com.epam.esm.controller.UserController;
 import com.epam.esm.controller.UserController;
 import com.epam.esm.dto.TagCreateDto;
 import com.epam.esm.dto.OrderDto;
@@ -27,7 +26,7 @@ public class LinkMapperFacade {
     private final ServiceGiftCertificateMapper certificateMapper;
 
     public void mapLinks(TagDto tagDto) {
-        tagDto.add(linkTo(methodOn(TagController.class).findById(tagDto.getId(),null)).withSelfRel());
+        tagDto.add(linkTo(methodOn(TagController.class).findById(tagDto.getId())).withSelfRel());
         tagDto.add(linkTo(methodOn(TagController.class).delete(tagDto.getId())).withRel("delete"));
         tagDto.add(linkTo(methodOn(TagController.class).create(new TagCreateDto(tagDto.getName()))).withRel("create"));
     }

@@ -51,7 +51,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public GiftCertificateDto create(GiftCertificateDto value) {
-        return null;
+        throw new UnsupportedOperationException("Method is not supported by current implementation");
     }
 
     @Override

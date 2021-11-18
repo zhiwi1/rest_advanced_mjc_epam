@@ -8,7 +8,6 @@ import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.TagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,16 +25,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 
 /**
  * The type Tag controller.
  */
 @RestController
-@RequestMapping("/v2/tags")
+@RequestMapping("/v3/tags")
 @RequiredArgsConstructor
 @Slf4j
 @Validated
@@ -52,7 +49,7 @@ public class TagController {
      * @return the list
      */
     @GetMapping
-    public List<TagDto> findAll(@RequestParam(required = false, defaultValue = "1") int page,
+    public List<TagDto> findAll(@RequestParam(required = false, defaultValue = "0") int page,
                                 @RequestParam(required = false, defaultValue = "5") int size) {
         PageDto pageDto = new PageDto(page, size);
         List<TagDto> tagDtoList = tagService.findAll(pageDto);
@@ -67,12 +64,7 @@ public class TagController {
      * @return the tag dto
      */
     @GetMapping("/{id}")
-    public TagDto findById(@PathVariable @Min(MIN_ID_VALUE) Long id, Principal principal) {
-        var principalToken = (KeycloakAuthenticationToken) principal;
-        Optional.ofNullable(principalToken).ifPresent(
-                token -> log.info(token.getAccount().getKeycloakSecurityContext().getToken().getEmail())
-        );
-
+    public TagDto findById(@PathVariable @Min(MIN_ID_VALUE) Long id) {
         TagDto tagDto = tagService.findById(id);
         linkMapper.mapLinks(tagDto);
         return tagDto;

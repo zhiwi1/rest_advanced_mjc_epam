@@ -44,4 +44,5 @@ public class ServiceGiftCertificateMapper {
     public GiftCertificateInputDto toDto(GiftCertificateDto giftCertificateCreateDto) {
         return modelMapper.map(giftCertificateCreateDto, GiftCertificateInputDto.class);
     }
+
 }

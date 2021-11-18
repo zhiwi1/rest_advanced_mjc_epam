@@ -108,14 +108,6 @@ class GlobalExceptionHandler {
         return new ExceptionResponse(ExceptionCode.NOT_FOUND, exceptionMessage);
     }
 
-//    @ExceptionHandler(RuntimeException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ExceptionResponse handleRuntimeException(RuntimeException exception, Locale locale) {
-//        String exceptionMessage = exceptionMessageCreator.createMessage(ExceptionMessageKey.INVALID_INPUT, locale);
-//        log.error(exceptionMessage);
-//        return new ExceptionResponse(ExceptionCode.INCORRECT_PARAMETER_VALUE, exceptionMessage);
-//    }
-
     private Set<ExceptionResponse> createExceptionResponse(Set<ConstraintViolation<?>> set, Locale locale) {
         return set.stream().map(violation -> violation.getInvalidValue() + SPACE_DELIMITER + exceptionMessageCreator.
                         createMessage(violation.getMessage(), locale))

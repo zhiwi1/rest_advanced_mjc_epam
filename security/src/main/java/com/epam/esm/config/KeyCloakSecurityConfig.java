@@ -51,8 +51,8 @@ public class KeyCloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
                 .authorizeRequests()
                 .antMatchers("/v2/certificates/**").permitAll().and()
                 .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .addFilterAfter(new SecurityUserFilter(userService), BasicAuthenticationFilter.class);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+              //  .addFilterAfter(new SecurityUserFilter(userService), BasicAuthenticationFilter.class);
     }
 
 }
