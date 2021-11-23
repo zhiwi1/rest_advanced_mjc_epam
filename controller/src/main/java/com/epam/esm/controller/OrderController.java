@@ -63,6 +63,7 @@ public class OrderController {
      * @return the list with orderDto
      */
     @GetMapping("/users/{userId}")
+
     @HasPermissionToFindByUserId
     public List<OrderDto> findByUserId(@PathVariable @Min(MIN_ID_VALUE) Long userId,
                                        @RequestParam(required = false, defaultValue = "0") @Range(min = 0) int page,

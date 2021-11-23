@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 class GlobalExceptionHandler {
     private static final String SPACE_DELIMITER = " ";
     private final ExceptionMessageCreator exceptionMessageCreator;
-
     @ExceptionHandler(SpelEvaluationException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ExceptionResponse handleSpelEvaluationException(SpelEvaluationException e, Locale locale) {
