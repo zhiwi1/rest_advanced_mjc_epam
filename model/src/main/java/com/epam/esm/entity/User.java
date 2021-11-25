@@ -6,11 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
 
-import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.Entity;
 
 
 @Entity
@@ -22,4 +19,4 @@ import javax.persistence.GenerationType;
 @Audited
 public class User extends com.epam.esm.entity.Entity {
     private String name;
-}
+    }

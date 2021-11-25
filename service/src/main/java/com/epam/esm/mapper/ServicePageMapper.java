@@ -5,7 +5,7 @@ import com.epam.esm.util.Page;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-
+@Deprecated(since = "version 3")
 @Component
 @RequiredArgsConstructor
 public class ServicePageMapper {

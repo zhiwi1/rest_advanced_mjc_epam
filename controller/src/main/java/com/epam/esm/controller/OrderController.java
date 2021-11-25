@@ -3,11 +3,14 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.OrderDto;
 import com.epam.esm.dto.OrderInputDto;
 import com.epam.esm.dto.PageDto;
+import com.epam.esm.expression.HasPermissionToFindByUserId;
 import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Range;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,17 +23,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import java.security.Principal;
 import java.util.List;
 
 /**
  * The type Order controller.
  */
 @RestController
-@RequestMapping("/v2/orders")
+@RequestMapping("/v3/orders")
 @RequiredArgsConstructor
 @Validated
 public class OrderController {
-    private static final int MIN_ID_VALUE =1;
+    private static final int MIN_ID_VALUE = 1;
     private final OrderService orderService;
     private final LinkMapperFacade linkMapper;
 
@@ -42,6 +46,7 @@ public class OrderController {
      * @return the order dto
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public OrderDto findById(@PathVariable @Min(MIN_ID_VALUE) long id) {
         OrderDto orderDto = orderService.findById(id);
         linkMapper.mapLinks(orderDto);
@@ -58,8 +63,10 @@ public class OrderController {
      * @return the list with orderDto
      */
     @GetMapping("/users/{userId}")
-    public List<OrderDto> findByUserId(@PathVariable @Min(MIN_ID_VALUE) long userId,
-                                       @RequestParam(required = false, defaultValue = "1") @Range(min = 0) int page,
+
+    @HasPermissionToFindByUserId
+    public List<OrderDto> findByUserId(@PathVariable @Min(MIN_ID_VALUE) Long userId,
+                                       @RequestParam(required = false, defaultValue = "0") @Range(min = 0) int page,
                                        @RequestParam(required = false, defaultValue = "5") @Range(min = 0) int size) {
         PageDto pageDto = new PageDto(page, size);
         List<OrderDto> orderDtos = orderService.findByUserId(userId, pageDto);
@@ -75,7 +82,10 @@ public class OrderController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderDto create(@RequestBody @Valid OrderInputDto orderInputDto) {
+    public OrderDto create(@RequestBody @Valid OrderInputDto orderInputDto, Principal principal) {
+        var principalToken = (KeycloakAuthenticationToken) principal;
+        String nameOfUser = principalToken.getAccount().getKeycloakSecurityContext().getToken().getPreferredUsername();
+        orderInputDto.setNameOfUser(nameOfUser);
         OrderDto createdOrderDto = orderService.create(orderInputDto);
         linkMapper.mapLinks(createdOrderDto);
         return createdOrderDto;

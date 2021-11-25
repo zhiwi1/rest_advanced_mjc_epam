@@ -7,6 +7,7 @@ import com.epam.esm.dto.TagDto;
 import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.TagService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,11 +32,12 @@ import java.util.List;
  * The type Tag controller.
  */
 @RestController
-@RequestMapping("/v2/tags")
+@RequestMapping("/v3/tags")
 @RequiredArgsConstructor
+@Slf4j
 @Validated
 public class TagController {
-    private static final int MIN_ID_VALUE =1;
+    private static final int MIN_ID_VALUE = 1;
     private final TagService tagService;
     private final LinkMapperFacade linkMapper;
 
@@ -47,7 +49,7 @@ public class TagController {
      * @return the list
      */
     @GetMapping
-    public List<TagDto> findAll(@RequestParam(required = false, defaultValue = "1") int page,
+    public List<TagDto> findAll(@RequestParam(required = false, defaultValue = "0") int page,
                                 @RequestParam(required = false, defaultValue = "5") int size) {
         PageDto pageDto = new PageDto(page, size);
         List<TagDto> tagDtoList = tagService.findAll(pageDto);
@@ -76,7 +78,7 @@ public class TagController {
      */
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('admin') or hasRole('user')")
     public TagDto create(@Valid @RequestBody TagCreateDto tagCreateDto) {
         TagDto tagDto = tagService.create(tagCreateDto);
         linkMapper.mapLinks(tagDto);
@@ -91,6 +93,7 @@ public class TagController {
      */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<Void> delete(@PathVariable @Min(MIN_ID_VALUE) Long id) {
         tagService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -103,6 +106,7 @@ public class TagController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/attach")
+    @PreAuthorize("hasRole('admin') or hasRole('user')")
     public void attachTag(@Valid @RequestBody CertificateTagDto certificateTagDto) {
         tagService.attachTag(certificateTagDto);
     }
@@ -113,6 +117,7 @@ public class TagController {
      * @return the tag dto
      */
     @GetMapping("/popular")
+    @PreAuthorize("hasRole('admin')")
     public TagDto findMostPopularTagWithHighestCostOfAllOrders() {
         TagDto tagDto = tagService.findMostPopularTagWithHighestCostOfAllOrders();
         linkMapper.mapLinks(tagDto);

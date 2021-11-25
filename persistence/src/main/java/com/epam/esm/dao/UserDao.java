@@ -9,7 +9,8 @@ import java.util.Optional;
 /**
  * The interface User dao.
  */
-public interface UserDao {
+@Deprecated(since = "version 3")
+public interface UserDao  {
     /**
      * Find all list.
      *

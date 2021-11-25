@@ -3,6 +3,7 @@ package com.epam.esm.exception;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionFailedException;
+import org.springframework.expression.spel.SpelEvaluationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -24,6 +25,13 @@ import java.util.stream.Collectors;
 class GlobalExceptionHandler {
     private static final String SPACE_DELIMITER = " ";
     private final ExceptionMessageCreator exceptionMessageCreator;
+    @ExceptionHandler(SpelEvaluationException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ExceptionResponse handleSpelEvaluationException(SpelEvaluationException e, Locale locale) {
+        String exceptionMessage = exceptionMessageCreator.createMessage(ExceptionMessageKey.FORBIDDEN, locale);
+        log.error(exceptionMessage);
+        return new ExceptionResponse(ExceptionCode.FORBIDDEN, exceptionMessage);
+    }
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -54,7 +62,6 @@ class GlobalExceptionHandler {
                 .collect(Collectors.toSet());
     }
 
-//todo n+1
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Set<ExceptionResponse> handleResourceNotFoundException(
@@ -98,14 +105,6 @@ class GlobalExceptionHandler {
         String exceptionMessage = exceptionMessageCreator.createMessage(ExceptionMessageKey.RESOURCE_NOT_FOUND, locale);
         log.error(exceptionMessage);
         return new ExceptionResponse(ExceptionCode.NOT_FOUND, exceptionMessage);
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponse handleRuntimeException(RuntimeException exception, Locale locale) {
-        String exceptionMessage = exceptionMessageCreator.createMessage(ExceptionMessageKey.INVALID_INPUT, locale);
-        log.error(exceptionMessage);
-        return new ExceptionResponse(ExceptionCode.INCORRECT_PARAMETER_VALUE, exceptionMessage);
     }
 
     private Set<ExceptionResponse> createExceptionResponse(Set<ConstraintViolation<?>> set, Locale locale) {

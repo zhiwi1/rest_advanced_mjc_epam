@@ -17,7 +17,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
-
+@Deprecated(since = "November 2021")
 @Repository
 @RequiredArgsConstructor
 @Slf4j

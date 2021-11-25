@@ -7,6 +7,7 @@ import com.epam.esm.hateoas.LinkMapperFacade;
 import com.epam.esm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,9 +22,10 @@ import java.util.List;
  * The type User controller.
  */
 @RestController
-@RequestMapping("/v2/users")
+@RequestMapping("/v3/users")
 @RequiredArgsConstructor
 @Validated
+@PreAuthorize("hasRole('admin')")
 public class UserController {
     private static final int MIN_ID_VALUE =1;
     private final UserService userService;
@@ -37,7 +39,7 @@ public class UserController {
      * @return the list of user's dto
      */
     @GetMapping
-    public List<UserDto> findAll(@RequestParam(required = false, defaultValue = "1") @Range(min = 1) int page,
+    public List<UserDto> findAll(@RequestParam(required = false, defaultValue = "0") @Range(min = 1) int page,
                                  @RequestParam(required = false, defaultValue = "5") @Range(min = 1) int size) {
         PageDto pageDto = new PageDto(page, size);
         List<UserDto> userDtoList = userService.findAll(pageDto);

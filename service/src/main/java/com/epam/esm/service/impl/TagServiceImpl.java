@@ -1,7 +1,7 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.dao.GiftCertificateDao;
-import com.epam.esm.dao.TagDao;
+import com.epam.esm.dao.datajpa.DataGiftCertificateDao;
+import com.epam.esm.dao.datajpa.DataTagDao;
 import com.epam.esm.dto.CertificateTagDto;
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagCreateDto;
@@ -10,11 +10,11 @@ import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.DublicateResourceException;
 import com.epam.esm.exception.ResourceNotFoundException;
-import com.epam.esm.mapper.ServicePageMapper;
 import com.epam.esm.mapper.ServiceTagMapper;
 import com.epam.esm.service.TagService;
-import com.epam.esm.util.Page;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,10 +26,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class TagServiceImpl implements TagService {
-    private final TagDao tagDao;
-    private final GiftCertificateDao giftCertificateDao;
+    private final DataTagDao tagDao;
+    private final DataGiftCertificateDao giftCertificateDao;
     private final ServiceTagMapper tagMapper;
-    private final ServicePageMapper pageMapper;
 
 
     @Transactional
@@ -37,17 +36,22 @@ public class TagServiceImpl implements TagService {
     public TagDto create(TagCreateDto tagCreateDto) {
         isTagDublicate(tagCreateDto);
         Tag tag = tagMapper.toEntity(tagCreateDto);
-        Tag insertedTag = tagDao.create(tag);
+        Tag insertedTag = tagDao.save(tag);
         return tagMapper.toDto(insertedTag);
     }
 
     @Override
     public List<TagDto> findAll(PageDto pageDto) {
-        Page page = pageMapper.toEntity(pageDto);
-        List<Tag> foundTags = tagDao.findAll(page);
+        Pageable pageRequest = PageRequest.of(pageDto.getNumber(), pageDto.getSize());
+        List<Tag> foundTags = tagDao.findAll(pageRequest).getContent();
         return foundTags.stream()
                 .map(tagMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public TagDto create(TagDto value) {
+        throw new UnsupportedOperationException("Method is not supported by current implementation");
     }
 
     @Override
@@ -61,9 +65,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public void delete(Long id) {
         isTagExists(id);
-        Optional<Long> idOfGiftCertificate = giftCertificateDao.findIdByTagId(id);
-        idOfGiftCertificate.ifPresent(giftCertificateDao::updateLastDate);
-        tagDao.delete(id);
+        tagDao.deleteById(id);
     }
 
 
@@ -79,7 +81,6 @@ public class TagServiceImpl implements TagService {
             throw new ResourceNotFoundException(certificateTagDto.getCertificateId());
         }
         tagDao.attachTag(tag.get(), giftCertificate.get());
-        giftCertificateDao.updateLastDate(certificateTagDto.getCertificateId());
     }
 
     @Override

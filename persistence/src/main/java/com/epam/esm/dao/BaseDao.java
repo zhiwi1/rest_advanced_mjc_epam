@@ -11,6 +11,7 @@ import java.util.Optional;
  * @param <T> the type parameter
  * @param <K> the type parameter
  */
+@Deprecated(since = "version 3")
 public interface BaseDao<T, K> {
     /**
      * Find all elements list.

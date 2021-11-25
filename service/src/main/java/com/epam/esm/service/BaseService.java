@@ -32,4 +32,6 @@ public interface BaseService<T, K> {
      * @return the list
      */
     List<T> findAll(PageDto pageDto);
+
+    T create(T value);
 }

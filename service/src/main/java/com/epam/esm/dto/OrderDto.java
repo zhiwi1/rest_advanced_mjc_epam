@@ -9,11 +9,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -30,6 +32,6 @@ public class OrderDto extends RepresentationModel<OrderDto> {
     private ZonedDateTime createDate;
     @Min(1)
     private User user;
-    @Min(1)
-    private Long certificateId;
+    @NotEmpty
+    private List<Long> certificateId;
 }

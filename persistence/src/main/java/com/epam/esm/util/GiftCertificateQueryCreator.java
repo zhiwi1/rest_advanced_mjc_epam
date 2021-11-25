@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
  * The type Gift certificate query creator.
  */
 @UtilityClass
+@Deprecated(since = "version 3")
 public class GiftCertificateQueryCreator {
 
     private static final String TAGS = "tags";

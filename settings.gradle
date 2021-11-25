@@ -3,4 +3,5 @@ include 'persistence'
 include 'model'
 include 'service'
 include 'controller'
+include 'security'
 

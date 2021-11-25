@@ -1,18 +1,22 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.dao.GiftCertificateDao;
-import com.epam.esm.dto.*;
+import com.epam.esm.dao.datajpa.DataGiftCertificateDao;
+import com.epam.esm.dto.GiftCertificateInputDto;
+import com.epam.esm.dto.GiftCertificateQueryParamDto;
+import com.epam.esm.dto.GiftCertificateDto;
+import com.epam.esm.dto.PageDto;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.DublicateResourceException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.mapper.ServiceGiftCertificateMapper;
-import com.epam.esm.mapper.ServiceGiftCertificateQueryParamMapper;
-import com.epam.esm.mapper.ServicePageMapper;
 import com.epam.esm.service.GiftCertificateService;
-import com.epam.esm.util.GiftCertificateQueryParam;
-import com.epam.esm.util.Page;
+import com.epam.esm.util.GiftCertificateSpecification;
+
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,17 +28,15 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class GiftCertificateServiceImpl implements GiftCertificateService {
-    private final GiftCertificateDao giftCertificateDao;
+    private final DataGiftCertificateDao giftCertificateDao;
     private final ServiceGiftCertificateMapper certificateMapper;
-    private final ServicePageMapper pageMapper;
-    private final ServiceGiftCertificateQueryParamMapper queryParamMapper;
 
     @Transactional
     @Override
     public GiftCertificateDto create(GiftCertificateInputDto giftCertificateInputDto) {
         isCertificateDublicate(giftCertificateInputDto);
         GiftCertificate certificate = certificateMapper.toEntity(giftCertificateInputDto);
-        GiftCertificate addedCertificate = giftCertificateDao.create(certificate);
+        GiftCertificate addedCertificate = giftCertificateDao.save(certificate);
         return certificateMapper.toDto(addedCertificate);
     }
 
@@ -48,6 +50,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
+    public GiftCertificateDto create(GiftCertificateDto value) {
+        throw new UnsupportedOperationException("Method is not supported by current implementation");
+    }
+
+    @Override
     public GiftCertificateDto findById(Long id) {
         Optional<GiftCertificate> foundGiftCertificate = giftCertificateDao.findById(id);
         return foundGiftCertificate
@@ -58,14 +65,18 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<GiftCertificateDto> findGiftCertificates(
-            GiftCertificateQueryParamDto giftCertificateQueryParametersDto, PageDto pageDto) {
-        Page page = pageMapper.toEntity(pageDto);
-        GiftCertificateQueryParam queryParam = queryParamMapper.toEntity(giftCertificateQueryParametersDto);
+            GiftCertificateQueryParamDto params, PageDto pageDto) {
+        Pageable page = PageRequest.of(pageDto.getNumber(), pageDto.getSize());
+        Specification<GiftCertificate> specification = GiftCertificateSpecification.nameLike(params.getName())
+                .and(GiftCertificateSpecification.descriptionLike(params.getDescription()))
+                .and(GiftCertificateSpecification.findByTags(params.getTagNames()))
+                .and(GiftCertificateSpecification.havingOrderAndSort(params.getOrderType(), params.getSortType()));
+
         List<GiftCertificate> foundGiftCertificates =
-                giftCertificateDao.findByQueryParameters(queryParam, page);
-        return foundGiftCertificates.stream()
-                .map(certificateMapper::toDto)
-                .collect(Collectors.toList());
+                giftCertificateDao.findAll(specification, page).getContent();
+        return foundGiftCertificates.stream().
+                map(certificateMapper::toDto).
+                collect(Collectors.toList());
     }
 
     @Transactional
@@ -74,7 +85,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         GiftCertificateDto foundGiftCertificateDto = findById(id);
         updateFields(foundGiftCertificateDto, giftCertificateDto);
         GiftCertificate foundGiftCertificate = certificateMapper.toEntity(foundGiftCertificateDto);
-        GiftCertificate updatedGiftCertificate = giftCertificateDao.update(foundGiftCertificate);
+        GiftCertificate updatedGiftCertificate = giftCertificateDao.save(foundGiftCertificate);
         return certificateMapper.toDto(updatedGiftCertificate);
     }
 
@@ -82,7 +93,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public void delete(Long id) {
         isCertificateExists(id);
-        giftCertificateDao.delete(id);
+        giftCertificateDao.deleteById(id);
     }
 
 

@@ -9,6 +9,7 @@ import java.util.Optional;
 /**
  * The interface Tag dao.
  */
+@Deprecated(since = "version 3")
 public interface TagDao extends BaseDao<Tag, Long> {
     /**
      * Attach tag.
