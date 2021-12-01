@@ -1,8 +1,13 @@
 plugins {
-    id 'war'
+    id 'java'
+    id 'org.springframework.boot'
 }
-
-
+bootRun{
+    mainClass='com.epam.esm.config.ApplicationRunner'
+}
+bootJar{
+    mainClass='com.epam.esm.config.ApplicationRunner'
+}
 dependencies {
     implementation project(':model')
     implementation project(':service')
@@ -15,4 +20,5 @@ dependencies {
     testImplementation project(':persistence')
 
 }
+
 

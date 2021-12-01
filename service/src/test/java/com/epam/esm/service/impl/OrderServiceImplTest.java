@@ -86,7 +86,6 @@ class OrderServiceImplTest {
                 .user(new User("Ivan"))
                 .build();
         orderDto2 = OrderInputDto.builder()
-                .userId(1L)
                 .price(BigDecimal.TEN)
                 .certificateId(new Long[]{2L})
                 .build();
@@ -98,7 +97,6 @@ class OrderServiceImplTest {
                 .build();
         orderDto4 = OrderInputDto.builder()
                 .price(BigDecimal.TEN)
-                .userId(1L)
                 .certificateId(new Long[]{2L})
                 .build();
         giftCertificateDto1 = GiftCertificateDto.builder()
@@ -138,15 +136,14 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void addOrderCorrectDataShouldReturnOrderDtoTest() {
+    void addOrderIncorrectDataShouldThrowExceptionTest() {
         when(giftCertificateService.findById(any(long.class))).thenReturn(giftCertificateDto1);
         when(userService.findById(any(long.class))).thenReturn(userDto1);
         when(orderDao.save(any(Order.class))).thenReturn(order2);
         var giftCertificate = new GiftCertificate();
         giftCertificate.setPrice(BigDecimal.TEN);
         when(certificateDao.findById(any(Long.class))).thenReturn(Optional.of(giftCertificate));
-        OrderDto actual = orderService.create(orderDto2);
-        assertEquals(orderDto3, actual);
+        assertThrows(ResourceNotFoundException.class,()->orderService.create(orderDto2));
     }
 
     @Test
