@@ -136,15 +136,14 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void addOrderCorrectDataShouldReturnOrderDtoTest() {
+    void addOrderIncorrectDataShouldThrowExceptionTest() {
         when(giftCertificateService.findById(any(long.class))).thenReturn(giftCertificateDto1);
         when(userService.findById(any(long.class))).thenReturn(userDto1);
         when(orderDao.save(any(Order.class))).thenReturn(order2);
         var giftCertificate = new GiftCertificate();
         giftCertificate.setPrice(BigDecimal.TEN);
         when(certificateDao.findById(any(Long.class))).thenReturn(Optional.of(giftCertificate));
-        OrderDto actual = orderService.create(orderDto2);
-        assertEquals(orderDto3, actual);
+        assertThrows(ResourceNotFoundException.class,()->orderService.create(orderDto2));
     }
 
     @Test
