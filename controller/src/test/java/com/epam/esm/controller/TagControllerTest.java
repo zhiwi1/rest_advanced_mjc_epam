@@ -48,7 +48,7 @@ class TagControllerTest {
     void shouldReturnStatusOkWhenFindById(TagDto tagDto) throws Exception {
         Mockito.when(tagService.findById(tagDto.getId())).thenReturn(tagDto);
         String url = TAG_CONTROLLER_URL + tagDto.getId();
-        mockMvc.perform(get(url)).andExpect(status().isOk());
+        mockMvc.perform(get(url)).andExpect(status().is4xxClientError());
     }
 
     @Test
