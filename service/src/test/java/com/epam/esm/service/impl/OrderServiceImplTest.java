@@ -86,7 +86,6 @@ class OrderServiceImplTest {
                 .user(new User("Ivan"))
                 .build();
         orderDto2 = OrderInputDto.builder()
-                .userId(1L)
                 .price(BigDecimal.TEN)
                 .certificateId(new Long[]{2L})
                 .build();
@@ -98,7 +97,6 @@ class OrderServiceImplTest {
                 .build();
         orderDto4 = OrderInputDto.builder()
                 .price(BigDecimal.TEN)
-                .userId(1L)
                 .certificateId(new Long[]{2L})
                 .build();
         giftCertificateDto1 = GiftCertificateDto.builder()
