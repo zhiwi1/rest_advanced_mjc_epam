@@ -67,7 +67,7 @@ class GlobalExceptionHandler {
     public Set<ExceptionResponse> handleResourceNotFoundException(
             ResourceNotFoundException e, Locale locale) {
         Set<String> exceptionMessage = exceptionMessageCreator.createMessage(e.getErrorMessageKey(),
-                locale, (Object[]) e.getId());
+                locale, e.getId());
         return exceptionMessage.stream()
                 .map(message -> new ExceptionResponse(e.getCode(), message))
                 .collect(Collectors.toSet());

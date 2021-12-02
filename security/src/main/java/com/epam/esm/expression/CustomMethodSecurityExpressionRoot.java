@@ -37,7 +37,7 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot
 
     @Override
     public void setFilterObject(Object filterObject) {
-
+        throw new UnsupportedOperationException("This operation not supported");
     }
 
     @Override

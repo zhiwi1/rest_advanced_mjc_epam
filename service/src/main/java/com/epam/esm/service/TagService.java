@@ -3,9 +3,6 @@ package com.epam.esm.service;
 import com.epam.esm.dto.CertificateTagDto;
 import com.epam.esm.dto.TagCreateDto;
 import com.epam.esm.dto.TagDto;
-import com.epam.esm.entity.Tag;
-
-import java.util.Optional;
 
 
 /**

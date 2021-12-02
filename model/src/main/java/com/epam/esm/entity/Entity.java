@@ -1,6 +1,5 @@
 package com.epam.esm.entity;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 

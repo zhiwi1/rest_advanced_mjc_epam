@@ -7,9 +7,6 @@ import org.keycloak.KeycloakPrincipal;
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.representations.AccessToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.util.ObjectUtils;
-
-import java.util.Optional;
 
 @UtilityClass
 public class UserCreator {
