@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'jacoco'
 }
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web:2.5.5'
@@ -14,4 +15,14 @@ dependencies {
     implementation 'org.springframework:spring-orm:5.3.12'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.5'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
+}
+test {
+    finalizedBy jacocoTestReport
+}
+jacocoTestReport {
+    dependsOn test
+    reports {
+        html.enabled false
+        xml.enabled true
+    }
 }
