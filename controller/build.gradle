@@ -1,12 +1,23 @@
 plugins {
     id 'java'
     id 'org.springframework.boot'
+    id 'jacoco'
 }
 bootRun{
     mainClass='com.epam.esm.config.ApplicationRunner'
 }
 bootJar{
     mainClass='com.epam.esm.config.ApplicationRunner'
+}
+test {
+    finalizedBy jacocoTestReport
+}
+jacocoTestReport {
+    dependsOn test 
+    reports {
+        html.enabled false
+        xml.enabled true
+    }
 }
 dependencies {
     implementation project(':model')
