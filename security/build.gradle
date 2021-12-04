@@ -1,15 +1,5 @@
 plugins {
     id 'java'
-    id 'jacoco'
-}
-test {
-    finalizedBy jacocoTestReport
-}
-jacocoTestReport {
-    dependsOn test
-    reports {
-        xml.enabled( true)
-    }
 }
 group 'com.epam.esm'
 version 'unspecified'
