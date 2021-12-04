@@ -13,7 +13,6 @@ sonarqube {
     properties {
         property 'sonar.core.codeCoveragePlugin', 'jacoco'
         property "sonar.projectKey", "mjc-project"
-        property "sonar.jacoco.reportPath","C:\\Users\\Ivan_Zhyuliuk\\epam\\rest_advanced_mjc_epam\\service\\build\\jacoco\\test.exec"
     }
 }
 
