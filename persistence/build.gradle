@@ -1,5 +1,15 @@
 plugins {
     id 'java'
+    id 'jacoco'
+}
+test {
+    finalizedBy jacocoTestReport
+}
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.enabled(true)
+    }
 }
 
 dependencies {

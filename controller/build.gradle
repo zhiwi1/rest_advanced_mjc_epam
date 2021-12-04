@@ -9,11 +9,12 @@ bootRun{
 bootJar{
     mainClass='com.epam.esm.config.ApplicationRunner'
 }
+
 test {
     finalizedBy jacocoTestReport
 }
 jacocoTestReport {
-    dependsOn test 
+    dependsOn test
     reports {
         html.enabled false
         xml.enabled true
