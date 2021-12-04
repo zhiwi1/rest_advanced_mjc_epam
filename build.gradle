@@ -5,12 +5,15 @@ plugins {
     id "org.sonarqube" version "3.3"
 
 }
+
 tasks.named('sonarqube').configure {
     dependsOn test
 }
 sonarqube {
     properties {
+        property 'sonar.core.codeCoveragePlugin', 'jacoco'
         property "sonar.projectKey", "mjc-project"
+        property "sonar.jacoco.reportPath","${project.path}/service/build/jacoco/test.exec"
     }
 }
 
