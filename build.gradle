@@ -8,6 +8,7 @@ plugins {
 tasks.named('sonarqube').configure {
     dependsOn test
 }
+
 sonarqube {
     properties {
         property 'sonar.core.codeCoveragePlugin', 'jacoco'
