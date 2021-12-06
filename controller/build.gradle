@@ -3,7 +3,9 @@ plugins {
     id 'org.springframework.boot'
     id 'war'
 }
-
+configurations {
+    compile.exclude module: "spring-boot-starter-tomcat"
+}
 bootRun{
     mainClass='com.epam.esm.config.ApplicationRunner'
 
