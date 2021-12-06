@@ -6,7 +6,6 @@ plugins {
 
 bootRun{
     mainClass='com.epam.esm.config.ApplicationRunner'
-    jvmArgs = [ "-Djavax.net.ssl.trustStore=C:/Users/Ivan_Zhyuliuk/keystore.p12", "-Djavax.net.ssl.trustStorePassword=Qwe123okA123"]
 
 }
 bootJar{
