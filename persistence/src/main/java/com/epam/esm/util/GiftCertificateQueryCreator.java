@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * @deprecated 
+ * because project use datajpa since 3 version
  * The type Gift certificate query creator.
  */
 @UtilityClass

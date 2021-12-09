@@ -10,6 +10,9 @@ import java.util.Optional;
 
 /**
  * The interface Gift certificate dao.
+ * @deprecated
+ * because project use datajpa since 3 version
+ *
  */
 @Deprecated(since = "version 3")
 public interface GiftCertificateDao extends BaseDao<GiftCertificate, Long> {

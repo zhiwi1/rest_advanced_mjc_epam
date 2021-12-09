@@ -7,7 +7,7 @@ public abstract class ServiceException extends RuntimeException {
     /**
      * Instantiates a new Service exception.
      */
-    public ServiceException() {
+    protected ServiceException() {
         super();
     }
 
@@ -16,7 +16,7 @@ public abstract class ServiceException extends RuntimeException {
      *
      * @param message the message
      */
-    public ServiceException(String message) {
+    protected ServiceException(String message) {
         super(message);
     }
 
@@ -26,7 +26,7 @@ public abstract class ServiceException extends RuntimeException {
      * @param message the message
      * @param cause   the cause
      */
-    public ServiceException(String message, Throwable cause) {
+    protected ServiceException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -35,7 +35,7 @@ public abstract class ServiceException extends RuntimeException {
      *
      * @param cause the cause
      */
-    public ServiceException(Throwable cause) {
+    protected ServiceException(Throwable cause) {
         super(cause);
     }
 
@@ -47,7 +47,7 @@ public abstract class ServiceException extends RuntimeException {
      * @param enableSuppression  the enable suppression
      * @param writableStackTrace the writable stack trace
      */
-    public ServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected ServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

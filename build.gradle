@@ -13,8 +13,6 @@ sonarqube {
     properties {
         property 'sonar.core.codeCoveragePlugin', 'jacoco'
         property "sonar.projectKey", "mjc-project"
-        property 'sonar.core.codeCoveragePlugin', 'jacoco'
-        property 'sonar.coverage.jacoco.xmlReportPaths', 'service/build/reports/jacoco/test/jacocoTestReport.xml'
     }
 }
 
@@ -43,9 +41,9 @@ allprojects {
         }
 
         dependencies {
-
             compileOnly 'org.projectlombok:lombok:1.18.20'
             annotationProcessor 'org.projectlombok:lombok:1.18.20'
+            implementation 'io.micrometer:micrometer-registry-prometheus:1.8.1'
             implementation 'org.springframework.boot:spring-boot-starter:2.5.5'
             implementation 'org.springframework.boot:spring-boot-starter-actuator:2.5.5'
             testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.5'

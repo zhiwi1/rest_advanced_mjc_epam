@@ -5,6 +5,11 @@ import com.epam.esm.util.Page;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+
+/**
+ * @deprecated because project use datajpa since 3 version
+ */
+
 @Deprecated(since = "version 3")
 @Component
 @RequiredArgsConstructor

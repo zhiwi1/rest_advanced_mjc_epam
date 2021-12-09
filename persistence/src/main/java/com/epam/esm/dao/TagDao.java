@@ -8,6 +8,9 @@ import java.util.Optional;
 
 /**
  * The interface Tag dao.
+ * @deprecated
+ * because project use datajpa since 3 version
+ *
  */
 @Deprecated(since = "version 3")
 public interface TagDao extends BaseDao<Tag, Long> {

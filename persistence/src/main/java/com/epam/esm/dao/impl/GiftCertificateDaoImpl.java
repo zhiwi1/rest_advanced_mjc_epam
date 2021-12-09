@@ -16,7 +16,11 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
-
+/**
+ * @deprecated
+ * because project use datajpa since 3 version
+ *
+ */
 @Deprecated(since = "November 2021")
 @Repository
 @RequiredArgsConstructor

@@ -55,7 +55,7 @@ class OrderServiceImplTest {
     private static Order order2;
     private static OrderDto orderDto1;
     private static OrderInputDto orderDto2;
-    private static OrderDto orderDto3;
+
     private static OrderInputDto orderDto4;
     private static GiftCertificateDto giftCertificateDto1;
     private static UserDto userDto1;
@@ -89,12 +89,6 @@ class OrderServiceImplTest {
                 .price(BigDecimal.TEN)
                 .certificateId(new Long[]{2L})
                 .build();
-        orderDto3 = OrderDto.builder()
-                .id(1L)
-                .createDate(zonedDateTime)
-                .price(new BigDecimal("1000"))
-                .user(new User("Ivan"))
-                .build();
         orderDto4 = OrderInputDto.builder()
                 .price(BigDecimal.TEN)
                 .certificateId(new Long[]{2L})
@@ -127,7 +121,6 @@ class OrderServiceImplTest {
         order2 = null;
         orderDto1 = null;
         orderDto2 = null;
-        orderDto3 = null;
         orderDto4 = null;
         giftCertificateDto1 = null;
         userDto1 = null;

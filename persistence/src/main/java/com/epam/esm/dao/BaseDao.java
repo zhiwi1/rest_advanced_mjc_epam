@@ -10,6 +10,10 @@ import java.util.Optional;
  *
  * @param <T> the type parameter
  * @param <K> the type parameter
+ *
+ * @deprecated
+ * because project use datajpa since 3 version
+ *
  */
 @Deprecated(since = "version 3")
 public interface BaseDao<T, K> {
